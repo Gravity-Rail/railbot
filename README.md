@@ -32,22 +32,26 @@ your voice ---> Mini Pupper 2 record by Mic x2 ---> translate voice to text by O
 
 ## Simulated Mode
 
-To install standalone on a PC you'll need WSL 2 with Ubuntu 20.04 LTS, or actual ubuntu.
-
-To install on Linux, just use the distro above.
+To install standalone on a PC you'll need WSL 2 with Ubuntu 20.04 LTS, or actual Ubuntu.
 
 ```bash
+# make a wordspace directory for building our ROS2 package
 cd ~
 mkdir -p marvin_ros2_ws/src
 cd marvin_ros2_ws/src
-git clone git@github.com:Gravity-Rail/marvin
 
+# check out the code
+git clone git@github.com:Gravity-Rail/marvin
 cd marvin
-sudo chmod +x dependencies_install.sh
+
+# install Python dependencies
 . dependencies_install.sh
 
-cd $HOME/marvin_ros2_ws
+# install ROS dependencies
+cd ~/marvin_ros2_ws
 rosdep install --from-paths src --ignore-src -r -y
+
+# build the package
 source /opt/ros/humble/setup.bash
 colcon build --symlink-install
 ```
