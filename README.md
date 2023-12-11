@@ -32,23 +32,21 @@ your voice ---> Mini Pupper 2 record by Mic x2 ---> translate voice to text by O
 
 ## Simulated Mode
 
-To install standalone on a PC you'll need WSL 2 with Ubuntu 20.04 LTS.
+To install standalone on a PC you'll need WSL 2 with Ubuntu 20.04 LTS, or actual ubuntu.
 
 To install on Linux, just use the distro above.
 
 ```bash
 cd ~
-mkdir -p gpt4_ros2_ws/src
-cd gpt4_ros2_ws/src
-git clone https://github.com/gravityrail/gpt4-turbo-minipupper2-ros2-humble.git gpt4_ros2
+mkdir -p marvin_ros2_ws/src
+cd marvin_ros2_ws/src
+git clone git@github.com:Gravity-Rail/marvin
 
-cd gpt4_ros2
+cd marvin
 sudo chmod +x dependencies_install.sh
 . dependencies_install.sh
 
-cd $HOME/gpt4_ros2_ws
-gpt4_ros2_ws_dir=$(pwd)
-echo $gpt4_ros2_ws_dir
+cd $HOME/marvin_ros2_ws
 rosdep install --from-paths src --ignore-src -r -y
 source /opt/ros/humble/setup.bash
 colcon build --symlink-install
@@ -57,7 +55,7 @@ colcon build --symlink-install
 Modify your ~/.bashrc to include the following lines:
 
 ```bash
-. $HOME/gpt4_ros2_ws/install/setup.bash
+. $HOME/marvin_ros2_ws/install/setup.bash
 export OPENAI_API_KEY="..."
 ```
 

@@ -34,33 +34,34 @@ function error_check() {
 # Get directory where this script is installed
 BASEDIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 
+ROS2_WS_DIR="$HOME/marvin_ros2_ws"
+
 # Clone & build the repository
-if [ -d "$HOME/gpt4_ros2_ws" ]; then
-  echo "Removing existing gpt4_ros2_ws repository..."
-  rm -rf "$HOME/gpt4_ros2_ws"
+if [ -d ROS2_WS_DIR ]; then
+  echo "Removing existing $ROS2_WS_DIR repository..."
+  rm -rf $ROS2_WS_DIR
 fi
-mkdir -p $HOME/gpt4_ros2_ws/src
-cd $HOME/gpt4_ros2_ws/src
-git clone --depth=1 https://github.com/gravityrail/gpt4-turbo-minipupper2-ros2-humble.git gpt4_ros2
+mkdir -p $ROS2_WS_DIR/src
+cd $ROS2_WS_DIR/src
+git clone --depth=1 https://github.com/Gravity-Rail/marvin.git
 
 # Install necessary dependencies
 cd gpt4_ros2
 sudo chmod +x dependencies_install.sh
 . dependencies_install.sh
-cd $HOME/gpt4_ros2_ws
-gpt4_ros2_ws_dir=$(pwd)
-echo $gpt4_ros2_ws_dir
+cd $ROS2_WS_DIR
+echo $ROS2_WS_DIR
 rosdep install --from-paths src --ignore-src -r -y
 # source /opt/ros/humble/setup.bash
 colcon build --symlink-install
 
-sudo sed -i '#source $HOME/gpt4_ros2_ws/install/setup.bash#d' $HOME/.bashrc
-echo "source $HOME/gpt4_ros2_ws/install/setup.bash" >>$HOME/.bashrc
-. $HOME/gpt4_ros2_ws/install/setup.bash
+sudo sed -i "#source $ROS2_WS_DIR/install/setup.bash#d' ~/.bashrc
+echo "source $ROS2_WS_DIR/install/setup.bash" >>~/.bashrc
+. $ROS2_WS_DIR/install/setup.bash
 
 # Ask user for GPT API_KEY
 read -p "Enter your GPT API_KEY: " API_KEY
-cd $gpt4_ros2_ws_dir/src/gpt4_ros2/gpt_status/gpt_status
+cd $ROS2_WS_DIR/src/gpt4_ros2/gpt_status/gpt_status
 pwd
 sudo sed -i "s#<YOUR_API_KEY>#$API_KEY#" gpt_config.py
 if [[ $? -eq 0 ]]; then
