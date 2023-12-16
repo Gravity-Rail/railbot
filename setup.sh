@@ -25,7 +25,7 @@ if [ ! -d "$HOME/.micromamba/envs/marvin" ]; then
 	# micromamba create python=3.10.8 -y -n marvin -c conda-forge  > /dev/null
 
 	# Create a ros-humble desktop environment
-	micromamba create -n marvin -c conda-forge -c robostack ros-noetic-desktop
+	micromamba create -n marvin -c conda-forge -c robostack-staging ros-humble-desktop
 
 	# Activate the environment
 	# micromamba activate marvin
