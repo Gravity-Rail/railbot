@@ -74,9 +74,7 @@ JupyterROS allows you to prototype robotics applications from a familiar Python 
 interactive 3D graphics.
 
 ```bash
-# micromamba install -c conda-forge nodejs==15
-# micromamba install -c "conda-forge/label/cf201901" nodejs
-export NODE_OPTIONS=--openssl-legacy-provider # necessary to avoid OpenSSL
+export NODE_OPTIONS=--openssl-legacy-provider # necessary to avoid OpenSSL errors
 micromamba install -c conda-forge nodejs==18.9.1
 pip install jupyter jupyterlab==3.6 bqplot pyyaml ipywidgets==7.8.1 ipycanvas pymongo sidecar roslibpy
 pip install git+https://github.com/RoboStack/jupyter-ros.git
