@@ -46,7 +46,7 @@ cd $ROS2_WS_DIR/src
 git clone --depth=1 https://github.com/Gravity-Rail/marvin.git
 
 # Install necessary dependencies
-cd gpt4_ros2
+cd marvin
 sudo chmod +x dependencies_install.sh
 . dependencies_install.sh
 cd $ROS2_WS_DIR
@@ -55,13 +55,13 @@ rosdep install --from-paths src --ignore-src -r -y
 # source /opt/ros/humble/setup.bash
 colcon build --symlink-install
 
-sudo sed -i "#source $ROS2_WS_DIR/install/setup.bash#d' ~/.bashrc
+sudo sed -i "#source $ROS2_WS_DIR/install/setup.bash#d" ~/.bashrc
 echo "source $ROS2_WS_DIR/install/setup.bash" >>~/.bashrc
 . $ROS2_WS_DIR/install/setup.bash
 
 # Ask user for GPT API_KEY
 read -p "Enter your GPT API_KEY: " API_KEY
-cd $ROS2_WS_DIR/src/gpt4_ros2/gpt_status/gpt_status
+cd $ROS2_WS_DIR/src/marvin/gpt_status/gpt_status
 pwd
 sudo sed -i "s#<YOUR_API_KEY>#$API_KEY#" gpt_config.py
 if [[ $? -eq 0 ]]; then
@@ -71,7 +71,7 @@ else
 fi
 # print success message and wait for user to press any key to run the server and client
 echo "Press any key to run Demo 1: Simple robot GPT call on the PC side."
-read -p "If you need to run a more advanced demo, please read the readme.md file under the gpt4_ros2 package." -n1 -s
+read -p "If you need to run a more advanced demo, please read the readme.md file under the marvin package." -n1 -s
 gnome-terminal --disable-factory -- bash -c 'ros2 run gpt_main gpt_ros2_server' &
 gnome-terminal --disable-factory -- bash -c 'ros2 run gpt_main gpt_ros2_client' &
 

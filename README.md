@@ -4,7 +4,11 @@ ROS2 Humble modules forked from [MangDang Robotics Club example for the Mini Pup
 
 # Overview
 
-I am gradually trying to generalize this code as well as introduce more sophisticated integration between LLMs, multimodal, vision and audio models (TTS/STT). My goal is to find ways to manage the trade-offs between on-device, on-premise and cloud computing to maximise the utility of these robots without requiring radical new technologies or approaches.
+The purpose of this repo is to give as many people as possible the ability to write and package code that can be run on robots, with a focus on integrating cloud LLMs with embedded code and models for the purposes of learning and entertainment.
+
+I want this code to be as accessible as possible. I would love to get feedback on making setup simpler and more robust across as many developer environments as possible. I want to make it possible to become a robotics expert without ever needing anything more than a cheap Linux, Windows or Mac computer.
+
+    I am gradually trying to generalize this code as well as introduce more sophisticated integration between LLMs, multimodal, vision and audio models (TTS/STT). My goal is to find ways to manage the trade-offs between on-device, on-premise and cloud computing to maximise the utility of these robots without requiring radical new technologies or approaches.
 
 One way to think about it might be "LangChain for robots" - a place where people can quickly implement new techniques and get feedback on them.
 
@@ -29,6 +33,55 @@ How it works on my Mini Pupper 2:
 your voice ---> Mini Pupper 2 record by Mic x2 ---> translate voice to text by OpenAI STT service ---> chatGPT API ---> translate text to voice by OpenAI TTS service ---> Mini Pupper 2 voice Playback & Movement & emotion.
 
 # Installation
+
+## Installing ROS 2 on MacOS
+
+### Setup Environment
+
+Assumes a working [homebrew](https://brew.sh/) and micromamba environment. Also, make sure you install [Xcode](https://apps.apple.com/app/xcode/id497799835).
+
+Set up your shell:
+
+```bash
+. ./setup.sh
+```
+
+Also, might be useful, from the [ROS 2 MacOS docs](https://docs.ros.org/en/iron/Installation/Alternatives/macOS-Development-Setup.html#disable-system-integrity-protection-sip):
+
+> macOS/OS X versions >=10.11 have System Integrity Protection enabled by default. So that SIP doesn’t prevent processes from inheriting dynamic linker environment variables, such as DYLD_LIBRARY_PATH, you’ll need to disable it following [these instructions](https://developer.apple.com/library/content/documentation/Security/Conceptual/System_Integrity_Protection_Guide/ConfiguringSystemIntegrityProtection/ConfiguringSystemIntegrityProtection.html).
+
+### Updating Packages
+
+```bash
+micromamba update --all
+```
+
+### Run rvis
+
+Before running rvis or any other commands, first run `micromamba activate marvin`.
+
+Then, to run rvis2:
+
+```bash
+rviz2
+```
+
+### Using JupyterROS
+
+Adapted from https://github.com/RoboStack/jupyter-ros
+
+```bash
+pip install jupyter jupyterlab==3 bqplot pyyaml ipywidgets==7.8.1 ipycanvas pymongo sidecar
+pip install git+https://github.com/RoboStack/jupyter-ros.git
+```
+
+Now to launch:
+
+```bash
+jupyter-lab notebooks/ROS2_Keyboard_Input.ipynb
+```
+
+When you click in the small black square and press the arrow keys on your keyboard, you should see the icon change to reflect the pressed key.
 
 ## Simulated Mode
 
@@ -88,7 +141,7 @@ ssh -o ForwardX11=yes ubuntu@<Your Mini Pupper 2 IP address>
 and then run the following command:
 
 ```bash
-wget -O $HOME/install.sh https://raw.githubusercontent.com/gravityrail/gpt4-turbo-minipupper2-ros2-humble/main/install.sh && sudo chmod +x $HOME/install.sh && bash $HOME/install.sh && rm $HOME/install.sh
+wget -O $HOME/install.sh https://raw.githubusercontent.com/Gravity-Rail/marvin/main/install.sh && sudo chmod +x $HOME/install.sh && bash $HOME/install.sh && rm $HOME/install.sh
 ```
 
 After the one-click Installation, `demo 1 Simple robot GPT call on the PC side` will run automatically, if you want to run other demos, please modify the configuration file according to Step4 of Manual Installation
@@ -104,7 +157,7 @@ If you want to install manually, follow the steps below.
 
 ```bash
 cd <your_ws>/src
-git clone https://github.com/gravityrail/gpt4-turbo-minipupper2-ros2-humble.git
+git clone https://github.com/Gravity-Rail/marvin.git
 ```
 
 ### Step 2: Install dependencies
