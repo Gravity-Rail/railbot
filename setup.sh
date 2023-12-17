@@ -1,9 +1,3 @@
-# Run . setup.sh to set up the environment
-
-# homebrew deps
-echo "** Checking homebrew dependencies (this could take up to an hour)"
-brew install $(cat brew_dependencies.txt) -q > /dev/null
-
 # if the micromamba environment does not exist, create it
 if [ ! -d "$HOME/.micromamba/envs/railbot" ]; then
 	echo "** Creating railbot micromamba environment (up to 15 minutes)"
@@ -13,6 +7,8 @@ fi
 
 echo "** Activating railbot venv environment"
 micromamba activate railbot
+
+echo "** Installing pip dependencies"
 pip install -r requirements.txt
 
 echo "** Shell Ready"

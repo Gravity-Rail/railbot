@@ -32,13 +32,21 @@ your voice ---> Mini Pupper 2 record by Mic x2 ---> translate voice to text by O
 
 # Installation
 
-## Installing ROS 2 on MacOS
+## Installing ROS 2 on MacOS (may work on Linux too)
 
 ### Setup Environment
 
-Assumes a working [homebrew](https://brew.sh/) and micromamba environment. Also, make sure you install [Xcode](https://apps.apple.com/app/xcode/id497799835).
+We assume a working micromamba environment. On macOS, make sure you install [Xcode](https://apps.apple.com/app/xcode/id497799835).
 
-Set up your shell:
+On macOS with homebrew, you can get `micromamba` by running `brew install micromamba`.
+
+The `setup.sh` script does the following:
+ * creates the `railbot` micromamba environment with desired package channels and versions (ROS 2 Humble, nodejs, cmake, colcon, rosdep, etc)
+  * `micromamba create -n railbot -c conda-forge -c robostack-staging -c robostack-experimental ros-humble-desktop rosdep nodejs==18.9.1 compilers cmake pkg-config make ninja colcon-common-extensions`
+ * activates the `railbot` environment
+  * `micromamba activate railbot`
+ * installs packages specified in `requirements.txt`
+  * `pip install -r requirements.txt`
 
 ```bash
 . ./setup.sh
@@ -78,10 +86,6 @@ ROS_ETC_DIR=/Users/daniel/micromamba/envs/railbot/etc/ros
 
 ### Run `rvis2`
 
-Before running `rvis2` or any other commands, first run `micromamba activate railbot`.
-
-Then, to run `rvis2`:
-
 ```bash
 rviz2
 ```
@@ -90,7 +94,7 @@ rviz2
 
 `ros2` is a command-line tool for ROS 2.
 
-Here's a few examples. Note that if you open a new shell, you'll need to run `micromamba activate railbot` before running these commands:
+Here's a few examples:
 
 ```bash
 ros2 wtf # list out of date packages and other possible issues
@@ -105,7 +109,7 @@ ros2 run demo_nodes_cpp listener # listen for messages from the previous node
 Adapted from https://github.com/RoboStack/jupyter-ros
 
 JupyterROS allows you to prototype robotics applications from a familiar Python notebook interface, including
-interactive 3D graphics.
+interactive 3D graphics, all in a web browser:
 
 The following _may_ (TBC) be necessary in order to have the UI load properly:
 
@@ -131,6 +135,8 @@ Now try `ROS2_Turtlesim_KeyboardControl`. After clicking start, click on the sma
 
 ### Build the packages
 
+> *NOTE:* rosdep may not be necessary/useful on macOS?
+
 If you haven't done this yet, you'll need to initialize [rosdep](https://wiki.ros.org/rosdep). This is a command line tool for installing the system dependencies required by ROS packages.
 
 ```bash
@@ -154,7 +160,7 @@ Your "underlay" is the ROS 2 installation (in our case, ROS 2 "[Humble](https://
 The "underlay" for our workspace is the main setup.bash file for the ROS 2 installation.
 
 ```bash
-# TODO THIS IS WRONG AND UNNECESSARY
+# TODO THIS IS WRONG AND UNNECESSARY ON MACOS
 # source /opt/ros/humble/setup.bash
 ```
 
@@ -209,13 +215,20 @@ source ./install/local_setup.sh
 And now we can run it:
 
 ```bash
-pip install openai
-OPENAI_API_KEY="sk-..." ros2 run gpt_main gpt_ros2_server
+% pip install openai
+% OPENAI_API_KEY="sk-..." ros2 run gpt_main gpt_ros2_server
+[INFO] [1702827350.339493666] [gpt_ros2_server]: GPT Server is ready.
 ```
 
 And the client:
 
+```bash
+% ros2 run gpt_main gpt_ros2_client
+[INFO] [1702828717.243596012] [gpt_ros2_client]: GPT Client is ready.
+You: What is your name?
 
+Mini Pupper: My name is Mini Pupper. Woof!
+```
 
 ## Simulated Mode
 
