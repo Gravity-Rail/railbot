@@ -206,6 +206,8 @@ Now running `ls` in the current dir should show some additional directories alon
 build	install	log	src
 ```
 
+### Running a simple text chat example
+
 Now we can source our generated "overlay":
 
 ```bash
@@ -228,6 +230,48 @@ And the client:
 You: What is your name?
 
 Mini Pupper: My name is Mini Pupper. Woof!
+```
+
+### Running an audio chat example
+
+```bash
+source ./install/local_setup.sh
+OPENAI_API_KEY="sk-..." ros2 launch gpt_bringup gpt_bringup_launch.py mini_pupper:=False
+```
+
+Now when you see `Starting audio recording...` try saying a few words. After capturing a few seconds of audio, it sends it to OpenAI to be converted into text. Then, it sends the Text to the Chat Completions endpoint to compute a response. Finally, it converts the response text back into speech using _another_ API. No wonder it takes so long to reply!
+
+Here's some example output:
+
+```
+[audio_output-3] [INFO] [1702829135.556824870] [gpt.audio_output]: Text to speech node successfully initialized.
+[gpt_service-2] [INFO] [1702829135.556989663] [gpt.gpt_service]: GPT node is ready.
+[audio_output-3] [INFO] [1702829135.557156831] [gpt.audio_output]: Waiting for text to speech input...
+[audio_input-4] [INFO] [1702829135.741494108] [gpt.audio_input]: Audio input successfully initialized.
+[audio_input-4] [INFO] [1702829137.701167975] [gpt.audio_input]: Starting audio recording...
+[audio_input-4] [INFO] [1702829144.885283700] [gpt.audio_input]: Audio recording complete!
+[audio_input-4] Set parameter successful
+[gpt_param_server-1] [INFO] [1702829145.691914830] [gpt.gpt_param_server]: GPT status: "SPEECH_TO_TEXT_PROCESSING"
+[audio_input-4] [INFO] [1702829150.759706228] [gpt.audio_input]: Audio Input Node publishing:
+[audio_input-4] 'This is a test.'
+[gpt_service-2] [INFO] [1702829150.760200314] [gpt.gpt_service]: GPT node has received: This is a test.
+[gpt_service-2] Set parameter successful
+[gpt_param_server-1] [INFO] [1702829151.670866539] [gpt.gpt_param_server]: GPT status: "GPT_PROCESSING"
+[gpt_service-2] [INFO] [1702829151.776636563] [gpt.gpt_service]: GPT node is processing: This is a test.
+[gpt_service-2] [INFO] [1702829151.777072858] [gpt.gpt_service]: user_input_processor has finished.
+[gpt_service-2] [INFO] [1702829152.709136356] [gpt.gpt_service]: generate_chat_completion has finished.
+[gpt_service-2] [INFO] [1702829152.709641359] [gpt.gpt_service]: get_chat_response_text has finished.
+[gpt_service-2] [INFO] [1702829152.710320656] [gpt.gpt_service]: GPT service node has published: std_msgs.msg.String(data='Woof! Hello, how can Mini Pupper help you today?')
+[audio_output-3] [INFO] [1702829152.712106585] [gpt.audio_output]: Received text: 'Woof! Hello, how can Mini Pupper help you today?'
+[audio_output-3] Set parameter successful
+[gpt_param_server-1] [INFO] [1702829153.667098451] [gpt.gpt_param_server]: GPT status: "TEXT_TO_SPEECH_PROCESSING"
+[audio_output-3] Set parameter successful
+[gpt_param_server-1] [INFO] [1702829156.168938990] [gpt.gpt_param_server]: GPT status: "ROBOT_ACTION"
+[audio_output-3] [ffmpeg/demuxer] mp3: Estimating duration from bitrate, this may be inaccurate
+[audio_output-3]  (+) Audio --aid=1 (mp3 1ch 24000Hz)
+[audio_output-3] AO: [coreaudio] 24000Hz mono 1ch floatp
+[audio_output-3] A: -00:00:00 / 00:00:02 (0%)
+[audio_output-3] A: 00:00:00 / 00:00:02 (1%)
 ```
 
 ## Simulated Mode
