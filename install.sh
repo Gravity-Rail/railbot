@@ -34,7 +34,7 @@ function error_check() {
 # Get directory where this script is installed
 BASEDIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 
-ROS2_WS_DIR="$HOME/marvin_ros2_ws"
+ROS2_WS_DIR="$HOME/railbot_ros2_ws"
 
 # Clone & build the repository
 if [ -d ROS2_WS_DIR ]; then
@@ -43,10 +43,10 @@ if [ -d ROS2_WS_DIR ]; then
 fi
 mkdir -p $ROS2_WS_DIR/src
 cd $ROS2_WS_DIR/src
-git clone --depth=1 https://github.com/Gravity-Rail/marvin.git
+git clone --depth=1 https://github.com/Gravity-Rail/railbot.git
 
 # Install necessary dependencies
-cd marvin
+cd railbot
 sudo chmod +x dependencies_install.sh
 . dependencies_install.sh
 cd $ROS2_WS_DIR
@@ -61,7 +61,7 @@ echo "source $ROS2_WS_DIR/install/setup.bash" >>~/.bashrc
 
 # Ask user for GPT API_KEY
 read -p "Enter your GPT API_KEY: " API_KEY
-cd $ROS2_WS_DIR/src/marvin/gpt_status/gpt_status
+cd $ROS2_WS_DIR/src/railbot/gpt_status/gpt_status
 pwd
 sudo sed -i "s#<YOUR_API_KEY>#$API_KEY#" gpt_config.py
 if [[ $? -eq 0 ]]; then
@@ -71,7 +71,7 @@ else
 fi
 # print success message and wait for user to press any key to run the server and client
 echo "Press any key to run Demo 1: Simple robot GPT call on the PC side."
-read -p "If you need to run a more advanced demo, please read the readme.md file under the marvin package." -n1 -s
+read -p "If you need to run a more advanced demo, please read the readme.md file under the railbot package." -n1 -s
 gnome-terminal --disable-factory -- bash -c 'ros2 run gpt_main gpt_ros2_server' &
 gnome-terminal --disable-factory -- bash -c 'ros2 run gpt_main gpt_ros2_client' &
 

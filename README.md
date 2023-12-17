@@ -58,7 +58,7 @@ micromamba update --all
 
 ### Run rvis
 
-Before running rvis or any other commands, first run `micromamba activate marvin`.
+Before running rvis or any other commands, first run `micromamba activate railbot`.
 
 Then, to run rvis2:
 
@@ -103,18 +103,18 @@ To install standalone on a PC you'll need WSL 2 with Ubuntu 20.04 LTS, or actual
 ```bash
 # make a wordspace directory for building our ROS2 package
 cd ~
-mkdir -p marvin_ros2_ws/src
-cd marvin_ros2_ws/src
+mkdir -p railbot_ros2_ws/src
+cd railbot_ros2_ws/src
 
 # check out the code
-git clone git@github.com:Gravity-Rail/marvin
-cd marvin
+git clone git@github.com:Gravity-Rail/railbot
+cd railbot
 
 # install Python dependencies
 . dependencies_install.sh
 
 # install ROS dependencies
-cd ~/marvin_ros2_ws
+cd ~/railbot_ros2_ws
 rosdep install --from-paths src --ignore-src -r -y
 
 # build the package
@@ -125,7 +125,7 @@ colcon build --symlink-install
 Modify your ~/.bashrc to include the following lines:
 
 ```bash
-. $HOME/marvin_ros2_ws/install/setup.bash
+. $HOME/railbot_ros2_ws/install/setup.bash
 export OPENAI_API_KEY="..."
 ```
 
@@ -154,7 +154,7 @@ ssh -o ForwardX11=yes ubuntu@<Your Mini Pupper 2 IP address>
 and then run the following command:
 
 ```bash
-wget -O $HOME/install.sh https://raw.githubusercontent.com/Gravity-Rail/marvin/main/install.sh && sudo chmod +x $HOME/install.sh && bash $HOME/install.sh && rm $HOME/install.sh
+wget -O $HOME/install.sh https://raw.githubusercontent.com/Gravity-Rail/railbot/main/install.sh && sudo chmod +x $HOME/install.sh && bash $HOME/install.sh && rm $HOME/install.sh
 ```
 
 After the one-click Installation, `demo 1 Simple robot GPT call on the PC side` will run automatically, if you want to run other demos, please modify the configuration file according to Step4 of Manual Installation
@@ -170,7 +170,7 @@ If you want to install manually, follow the steps below.
 
 ```bash
 cd <your_ws>/src
-git clone https://github.com/Gravity-Rail/marvin.git
+git clone https://github.com/Gravity-Rail/railbot.git
 ```
 
 ### Step 2: Install dependencies

@@ -1,2 +1,2 @@
-micromamba activate marvin
+micromamba activate railbot
 rviz2

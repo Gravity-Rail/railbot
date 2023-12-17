@@ -20,19 +20,19 @@ brew install $(cat brew_dependencies.txt) -q > /dev/null
 # fi
 
 # if the micromamba environment does not exist, create it
-if [ ! -d "$HOME/.micromamba/envs/marvin" ]; then
-	echo "** Creating marvin micromamba environment (up to 15 minutes)"
-	# micromamba create python=3.10.8 -y -n marvin -c conda-forge  > /dev/null
+if [ ! -d "$HOME/.micromamba/envs/railbot" ]; then
+	echo "** Creating railbot micromamba environment (up to 15 minutes)"
+	# micromamba create python=3.10.8 -y -n railbot -c conda-forge  > /dev/null
 
 	# Create a ros-humble desktop environment
-	micromamba create -n marvin -c conda-forge -c robostack-staging ros-humble-desktop
+	micromamba create -n railbot -c conda-forge -c robostack-staging ros-humble-desktop
 
 	# Activate the environment
-	# micromamba activate marvin
+	# micromamba activate railbot
 fi
 
-echo "** Activating marvin venv environment"
-micromamba activate marvin
+echo "** Activating railbot venv environment"
+micromamba activate railbot
 # . venv/bin/activate
 # pip3 install --upgrade pip
 
@@ -52,7 +52,7 @@ micromamba install -c conda-forge compilers cmake pkg-config make ninja colcon-c
 #   nose pep8 psutil pydocstyle pydot pyparsing==2.4.7 \
 #   pytest-mock rosdep rosdistro setuptools==59.6.0 vcstool > /dev/null
 
-# echo "** Installing marvin dependencies (up to 15 minutes)"
+# echo "** Installing railbot dependencies (up to 15 minutes)"
 # pip3 install -r requirements.txt > /dev/null
 
 echo "** Shell Ready"
