@@ -1,10 +1,8 @@
-# Forked from MangDang Robotics Club
-
-ROS2 Humble modules forked from [MangDang Robotics Club example for the Mini Pupper 2](https://github.com/mangdangroboticsclub/chatgpt-minipupper2-ros2-humble).
+# RailBot: An easy way to get started with robotics and multimodal models
 
 # Overview
 
-The purpose of this repo is to give as many people as possible the ability to write and package code that can be run on robots, with a focus on integrating cloud LLMs with embedded code and models for the purposes of learning and entertainment.
+The purpose of RailBot is to give as many people as possible the ability to write and package code that can be run on robots, with a focus on integrating cloud LLMs with embedded code and models for the purposes of learning and entertainment.
 
 I want this code to be as accessible as possible. I would love to get feedback on making setup simpler and more robust across as many developer environments as possible. I want to make it possible to become a robotics expert without ever needing anything more than a cheap Linux, Windows or Mac computer.
 
@@ -266,3 +264,5 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ```
+
+ROS2 Humble modules originally forked from [MangDang Robotics Club example for the Mini Pupper 2](https://github.com/mangdangroboticsclub/chatgpt-minipupper2-ros2-humble).
