@@ -274,6 +274,10 @@ Here's some example output:
 [audio_output-3] A: 00:00:00 / 00:00:02 (1%)
 ```
 
+# STOP HERE
+
+The docs below this point need to be updated for the micromamba/conda-ish approach described above, which works on a mac but might need tweaking for Linux and certainly Windows.
+
 ## Simulated Mode
 
 To install standalone on a PC you'll need WSL 2 with Ubuntu 20.04 LTS, or actual Ubuntu.
