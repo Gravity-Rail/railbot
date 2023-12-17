@@ -7,7 +7,17 @@ numpy
 sounddevice
 pydub
 scipy
-numpy 
-sounddevice 
-cffi 
+numpy
+sounddevice
+cffi
 soundfile
+jupyter
+jupyterlab==3.6
+bqplot
+pyyaml
+ipywidgets==7.8.1
+ipycanvas
+pymongo
+sidecar
+roslibpy
+jupyros @ git+https://github.com/RoboStack/jupyter-ros.git

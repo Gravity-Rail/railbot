@@ -2,7 +2,7 @@
 
 # Overview
 
-The purpose of RailBot is to give as many people as possible the ability to write and package code that can be run on robots, with a focus on integrating cloud LLMs with embedded code and models for the purposes of learning and entertainment.
+The purpose of RailBot is to enable anyone write and package code that can be run on real robots, with a focus on integrating cloud LLMs with embedded code and models for the purposes of learning and entertainment.
 
 I want this code to be as accessible as possible. I would love to get feedback on making setup simpler and more robust across as many developer environments as possible. I want to make it possible to become a robotics expert without ever needing anything more than a cheap Linux, Windows or Mac computer.
 
@@ -48,20 +48,56 @@ Also, might be useful, from the [ROS 2 MacOS docs](https://docs.ros.org/en/iron/
 
 > macOS/OS X versions >=10.11 have System Integrity Protection enabled by default. So that SIP doesn’t prevent processes from inheriting dynamic linker environment variables, such as DYLD_LIBRARY_PATH, you’ll need to disable it following [these instructions](https://developer.apple.com/library/content/documentation/Security/Conceptual/System_Integrity_Protection_Guide/ConfiguringSystemIntegrityProtection/ConfiguringSystemIntegrityProtection.html).
 
+Confirm that your environment is working by running rvis2:
+
+```bash
+rvis2
+```
+
 ### Updating Packages
+
+If you want to update packages later, run this:
 
 ```bash
 micromamba update --all
 ```
 
-### Run rvis
+### Running Commands
 
-Before running rvis or any other commands, first run `micromamba activate railbot`.
+Before running ROS commands in a new shell, you need to run `micromamba activate railbot`. Once you've run that command, your environment should contain the base "underlay" for ROS:
 
-Then, to run rvis2:
+```bash
+$ env | grep ROS
+ROS_DISTRO=humble
+ROS_LOCALHOST_ONLY=0
+ROS_PYTHON_VERSION=3
+ROS_VERSION=2
+ROS_OS_OVERRIDE=conda:osx
+ROS_ETC_DIR=/Users/daniel/micromamba/envs/railbot/etc/ros
+```
+
+### Run `rvis2`
+
+Before running `rvis2` or any other commands, first run `micromamba activate railbot`.
+
+Then, to run `rvis2`:
 
 ```bash
 rviz2
+```
+
+### Run `ros2`
+
+`ros2` is a command-line tool for ROS 2.
+
+Here's a few examples. Note that if you open a new shell, you'll need to run `micromamba activate railbot` before running these commands:
+
+```bash
+ros2 wtf # list out of date packages and other possible issues
+ros2 interface list # list interfaces (like IDL) for things like goals, sensor data, etc.
+ros2 topic list # list topics that can be subscribed to which will emit or receive structured data
+ros2 run demo_nodes_cpp talker # run a node that emits "Hello World {N}" messages
+ros2 run demo_nodes_cpp listener # listen for messages from the previous node
 ```
 
 ### Using JupyterROS
@@ -71,12 +107,9 @@ Adapted from https://github.com/RoboStack/jupyter-ros
 JupyterROS allows you to prototype robotics applications from a familiar Python notebook interface, including
 interactive 3D graphics.
 
-```bash
-export NODE_OPTIONS=--openssl-legacy-provider # necessary to avoid OpenSSL errors
-micromamba install -c conda-forge nodejs==18.9.1
-pip install jupyter jupyterlab==3.6 bqplot pyyaml ipywidgets==7.8.1 ipycanvas pymongo sidecar roslibpy
-pip install git+https://github.com/RoboStack/jupyter-ros.git
+The following _may_ (TBC) be necessary in order to have the UI load properly:
 
+```bash
 jupyter nbextension install --py --symlink --sys-prefix jupyros
 jupyter labextension install @jupyter-widgets/jupyterlab-manager
 jupyter labextension install @jupyter-widgets/jupyterlab-sidecar
@@ -92,7 +125,93 @@ Now to launch:
 jupyter-lab notebooks/ROS2_Keyboard_Input.ipynb
 ```
 
-When you click in the small black square and press the arrow keys on your keyboard, you should see the icon change to reflect the pressed key.
+When you click in the small black square and press the arrow keys on your keyboard, you should see the icon change to reflect the pressed key. Scroll to the bottom and click "start" before interacting with the keyboard control.
+
+Now try `ROS2_Turtlesim_KeyboardControl`. After clicking start, click on the smaller blue square and then scroll to view the turtle. Then you can use the arrow keys to turn and move the turtle forwards and backwards.
+
+### Build the packages
+
+If you haven't done this yet, you'll need to initialize [rosdep](https://wiki.ros.org/rosdep). This is a command line tool for installing the system dependencies required by ROS packages.
+
+```bash
+rosdep init
+rosdep update
+```
+
+Now, let's install the dependencies and then build the packages:
+
+```bash
+rosdep install --from-paths . --ignore-src -r -y # TODO: this might not be necessary
+colcon build --symlink-install --cmake-args -DPython3_FIND_VIRTUALENV=ONLY
+```
+
+### Build a Workspace
+
+In Ros 2, you run packages from a [Workspace](https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Creating-A-Workspace/Creating-A-Workspace.html), which is a specially-arranged directory that includes a shell script that you source before running the packages.
+
+Your "underlay" is the ROS 2 installation (in our case, ROS 2 "[Humble](https://docs.ros.org/en/foxy/Releases/Release-Humble-Hawksbill.html)"). Note that MacOS is a "tier 3 platform" and so may be missing packages that are available on Linux or Windows.
+
+The "underlay" for our workspace is the main setup.bash file for the ROS 2 installation.
+
+```bash
+# TODO THIS IS WRONG AND UNNECESSARY
+# source /opt/ros/humble/setup.bash
+```
+
+Now you'll want to create your own workspace directory.
+
+```bash
+# change this to whatever you want, but don't forget to have it set in your
+# shell when running any of these commands again.
+RAILBOT_SOURCE=$(pwd)
+RAILBOT_WS=~/workspace/robotics/railbot_ws
+
+# make our workspace dir
+mkdir -p $RAILBOT_WS/src
+cd $RAILBOT_WS/src
+```
+
+On Linux you would run `rosdep` right now, but on MacOS we don't. We use `brew` and `conda` to install system-level dependencies instead.
+
+Now let's symlink our source into the workspace.
+
+```bash
+ln -s $RAILBOT_SOURCE $RAILBOT_WS/src
+```
+
+And now let's build *from the root of our workspace* (otherwise packages will be built in whatever directory you're in):
+
+```bash
+cd $RAILBOT_WS
+colcon build --symlink-install --cmake-args -DPython3_FIND_VIRTUALENV=ONLY
+```
+
+Some useful arguments for `colcon build`:
+
+ * `--packages-up-to` builds the package you want, plus all its dependencies, but not the whole workspace (saves time)
+ * `--symlink-install` saves you from having to rebuild every time you tweak python scripts
+ * `--event-handlers` console_direct+ shows console output while building (can otherwise be found in the log directory)
+
+Now running `ls` in the current dir should show some additional directories alongside `railbot`:
+
+```bash
+% ls
+build	install	log	src
+```
+
+Now we can source our generated "overlay":
+
+```bash
+source ./install/local_setup.sh
+```
+
+And now we can run it:
+
+```bash
+pip install openai
+OPENAI_API_KEY="sk-..."
+ros2 run gpt_main gpt_ros2_server
+```
 
 ## Simulated Mode
 
@@ -108,7 +227,7 @@ cd railbot_ros2_ws/src
 git clone git@github.com:Gravity-Rail/railbot
 cd railbot
 
-# install Python dependencies
+# install Python dependencies for Linux
 . dependencies_install.sh
 
 # install ROS dependencies
