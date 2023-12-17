@@ -6,7 +6,7 @@ The purpose of RailBot is to enable anyone write and package code that can be ru
 
 I want this code to be as accessible as possible. I would love to get feedback on making setup simpler and more robust across as many developer environments as possible. I want to make it possible to become a robotics expert without ever needing anything more than a cheap Linux, Windows or Mac computer.
 
-    I am gradually trying to generalize this code as well as introduce more sophisticated integration between LLMs, multimodal, vision and audio models (TTS/STT). My goal is to find ways to manage the trade-offs between on-device, on-premise and cloud computing to maximise the utility of these robots without requiring radical new technologies or approaches.
+I am gradually trying to generalize this code as well as introduce more sophisticated integration between LLMs, multimodal, vision and audio models (TTS/STT). My goal is to find ways to manage the trade-offs between on-device, on-premise and cloud computing to maximise the utility of these robots without requiring radical new technologies or approaches.
 
 One way to think about it might be "LangChain for robots" - a place where people can quickly implement new techniques and get feedback on them.
 
@@ -188,8 +188,9 @@ colcon build --symlink-install --cmake-args -DPython3_FIND_VIRTUALENV=ONLY
 
 Some useful arguments for `colcon build`:
 
- * `--packages-up-to` builds the package you want, plus all its dependencies, but not the whole workspace (saves time)
  * `--symlink-install` saves you from having to rebuild every time you tweak python scripts
+ * `--cmake-args -DPython3_FIND_VIRTUALENV=ONLY` helps avoid errors if using micromamba on macOS, and possibly other platforms.
+ * `--packages-up-to` builds the package you want, plus all its dependencies, but not the whole workspace (saves time)
  * `--event-handlers` console_direct+ shows console output while building (can otherwise be found in the log directory)
 
 Now running `ls` in the current dir should show some additional directories alongside `railbot`:
@@ -209,9 +210,12 @@ And now we can run it:
 
 ```bash
 pip install openai
-OPENAI_API_KEY="sk-..."
-ros2 run gpt_main gpt_ros2_server
+OPENAI_API_KEY="sk-..." ros2 run gpt_main gpt_ros2_server
 ```
+
+And the client:
+
+
 
 ## Simulated Mode
 
