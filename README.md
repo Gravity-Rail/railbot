@@ -104,6 +104,16 @@ ros2 run demo_nodes_cpp talker # run a node that emits "Hello World {N}" message
 ros2 run demo_nodes_cpp listener # listen for messages from the previous node
 ```
 
+### Run `rqt_graph`
+
+Once you have some ROS 2 nodes running, you can visualize them using `rqt_graph`
+
+```bash
+rqt_graph
+```
+
+Try running this app, then running the `talker` example above, then click the "refresh" button. Then run the `listener` example and refresh again. You should see the nodes appearing and disappearing, including their topic subscriptions.
+
 ### Using JupyterROS
 
 Adapted from https://github.com/RoboStack/jupyter-ros
@@ -132,6 +142,68 @@ jupyter-lab notebooks/ROS2_Keyboard_Input.ipynb
 When you click in the small black square and press the arrow keys on your keyboard, you should see the icon change to reflect the pressed key. Scroll to the bottom and click "start" before interacting with the keyboard control.
 
 Now try `ROS2_Turtlesim_KeyboardControl`. After clicking start, click on the smaller blue square and then scroll to view the turtle. Then you can use the arrow keys to turn and move the turtle forwards and backwards.
+
+### Running VisualROS with Node RED
+
+VisualROS is a way of creating ROS nodes visually in the browser. The Docker images don't work so we need to build against the OS in our micromanba environment.
+
+Read more [here](https://github.com/eProsima/node-red-ros2-plugin).
+
+```bash
+npm install -g node-red
+
+# also need this for compilation to work
+# micromamba install -c conda-forge websocketpp
+brew install websocketpp
+# or, on Ubuntu: sudo apt install websocketpp-dev
+```
+
+Now we install the eProsima "integration service" in the ROS 2 workspace.
+
+```bash
+cd $RAILBOT_WS/src
+git clone https://github.com/eProsima/Integration-Service.git is
+git clone https://github.com/eProsima/WebSocket-SH.git
+git clone https://github.com/eProsima/ROS2-SH.git
+git clone https://github.com/eProsima/FIWARE-SH.git
+
+# not necessary on macos?
+# . /opt/ros/humble/setup.sh # customize the ROS2 distro: foxy, galactic, humble ...
+cd $RAILBOT_WS
+colcon build --symlink-install  --cmake-args -DIS_ROS2_SH_MODE=DYNAMIC -DPython3_FIND_VIRTUALENV=ONLY -Dwebsocketpp_DIR=/opt/homebrew/Cellar/websocketpp/0.8.2/lib/cmake/websocketpp/
+```
+
+Then initialize your workspace environment and run `integration-service` as a test:
+
+```bash
+. ./install/local_setup.zsh
+```
+
+Now we install the node-red plugin:
+
+```bash
+$ npm install -g node-red-ros2-plugin
+```
+
+And run node-red:
+
+```bash
+node-red
+```
+
+### Using with FoxGlove
+
+TODO: can't make it work on macOS
+
+FoxGlove is a development tool that can help visualize your robot. It requires installing a special [foxglove_bridge](https://github.com/foxglove/ros-foxglove-bridge) Ros node in your workspace.
+
+```
+cd <path/to/your/ros_ws>
+git clone https://github.com/foxglove/ros-foxglove-bridge.git src/ros-foxglove-bridge
+rosdep update # not necessary on macos?
+rosdep install --ignore-src --default-yes --from-path src # might fail
+colcon build --event-handlers console_direct+ --symlink-install --cmake-args  -DPython3_FIND_VIRTUALENV=ONLY
+```
 
 ### Build the packages
 
@@ -308,7 +380,7 @@ Instead modify model name in `inference_node.cpp`:
 
 ```cpp
 // whisper parameters
-node_ptr_->declare_parameter("model_name", "large-v3-q5_0"); // was base.en
+node_ptr_->declare_parameter("model_name", "medium.en"); // was base.en
 ```
 
 Or maybe (TBD) the choices in whisper_server_mixin.py
