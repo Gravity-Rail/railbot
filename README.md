@@ -36,9 +36,13 @@ your voice ---> Mini Pupper 2 record by Mic x2 ---> translate voice to text by O
 
 ### Setup Environment
 
-We assume a working micromamba environment. On macOS, make sure you install [Xcode](https://apps.apple.com/app/xcode/id497799835).
+We assume a working micromamba environment.
 
-On macOS with homebrew, you can get `micromamba` by running `brew install micromamba`.
+> [!TIP]
+> On macOS, make sure you install [Xcode](https://apps.apple.com/app/xcode/id497799835).
+
+> [!TIP]
+> On macOS with homebrew, you can get `micromamba` by running `brew install micromamba`.
 
 The `setup.sh` script does the following:
  * creates the `railbot` micromamba environment with desired package channels and versions (ROS 2 Humble, nodejs, cmake, colcon, rosdep, etc)
