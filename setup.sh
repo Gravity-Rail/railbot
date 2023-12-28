@@ -1,12 +1,16 @@
+#!/bin/bash
+
 # if micromamba does not exist, install it
-if ! command -v micromamba &> /dev/null; then
+if ! type micromamba &> /dev/null; then
 	echo "** Installing micromamba"
-	# nope, turns out no support for Raspberry Pi
-	# "${SHELL}" <(curl -L micro.mamba.pm/install.sh)
-	# btw this next command doesn't actually work on 32-bit Pi either since CPU gets reported as arm71 instead of aarch64
 	# make sure you're running the 64-bit Pi os!
-	curl -L -O "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
-	bash Miniforge3-$(uname)-$(uname -m).sh
+
+	# alt: miniforge / mamba
+	# curl -L -O "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
+	# bash Miniforge3-$(uname)-$(uname -m).sh -b
+
+	"${SHELL}" <(curl -L micro.mamba.pm/install.sh)
+	. $HOME/.bashrc
 fi
 
 # if the micromamba environment does not exist, create it
