@@ -1,4 +1,10 @@
-This code defines a `GPTRobot` class that extends the `Node` class and responsible for controlling the head behavior of a GPT robot. The robot is designed to respond to various GPT status values which represent different robot states, such as WAITING_USER_INPUT, ROBOT_ACTION, SPEECH_TO_TEXT_PROCESSING, GPT_PROCESSING, and TEXT_TO_SPEECH_PROCESSING.
+This code defines a `MiniPupperRobot` class that extends the `Node` class and responsible for controlling the head behavior of a MiniPupper robot.
+
+This code has been adapted from the excellent work by MangDang at
+
+The status values used by the MiniPupperRobot are:
+
+WAITING_USER_INPUT, ROBOT_ACTION, STT_PROCESSING, CHAT_LLM_PROCESSING, and TTS_PROCESSING
 
 ## Features
 
@@ -7,11 +13,11 @@ This code defines a `GPTRobot` class that extends the `Node` class and responsib
 - Ability to play a music file during certain robot states.
 - Real-time state updates through the robot_behavior_callback function.
 - Implements multi-threading to ensure smooth animations and music playback.
-- GPTStatusOperation class to handle GPT status.
+- RailbotStatusOperation class to handle GPT status.
 
 ## Usage
 
-To use the `GPTRobot` class, simply create an instance and start the node. The robot will automatically respond to the GPT status values, showing the appropriate animation and head movement depending on the robot's current status.
+To use the `MiniPupperRobot` class, simply create an instance and start the node. The robot will automatically respond to the GPT status values, showing the appropriate animation and head movement depending on the robot's current status.
 
 Below is a brief explanation of each method and their animations:
 
@@ -21,4 +27,4 @@ Below is a brief explanation of each method and their animations:
 - `play_music()`: Plays an mp3 music file during certain robot states.
 - `get_real_path()`: Helper method to get the real path for the music file.
 
-Upon executing this example, the robot will start, and depending on the different GPT status values, the robot will animate between shaking and nodding its head, and play music during some states. 
+Upon executing this example, the robot will start, and depending on the different GPT status values, the robot will animate between shaking and nodding its head, and play music during some states.

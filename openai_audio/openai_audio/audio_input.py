@@ -21,10 +21,10 @@
 # The input volume can be re-scaled for robots with low output volume such as Mini Pupper v2.
 # It also supports continuous audio input and real-time transcription by checking the GPT status
 # and executing the audio input and transcription process accordingly.
-# The transcription results are published as ROS2 String messages to the "gpt_text_input_original" topic.
+# The transcription results are published as ROS2 String messages to the "chat_llm_text_input" topic.
 # Make sure to configure the necessary OpenAI credentials and settings in the provided config file.
 #
-# Author: Herman Ye
+# Author: Daniel Walmsley
 
 # ROS related
 import rclpy
@@ -33,40 +33,38 @@ from std_msgs.msg import String
 from openai import OpenAI
 
 from pydub import AudioSegment
-
-# Audio recording related
 import sounddevice as sd
 from scipy.io.wavfile import write
 
 # GPT related
-from gpt_status.gpt_param_server import GPTStatus, GPTStatusOperation
-from gpt_status.gpt_config import GPTConfig
+from railbot_status.railbot_param_server import RailbotStatus, RailbotStatusOperation
+from railbot_status.railbot_config import RailbotConfig
 
 # Other libraries
 import os
 
-config = GPTConfig()
+config = RailbotConfig()
 
 # openai.organization = config.organization
 client = OpenAI(api_key=config.api_key)
 
 class AudioInput(Node):
     def __init__(self):
-        super().__init__("audio_input", namespace="gpt")
+        super().__init__("audio_input", namespace="railbot")
         # Publisher
         self.publisher = self.create_publisher(
-            String, "gpt_text_input_original", 10
+            String, "chat_llm_text_input", 10
         )
         # Timer
         self.create_timer(1, self.run_audio_input_callback)
-        
-        self.audio_file = "/tmp/gpt_audio.wav"
-        self.mp3_audio_file = "/tmp/gpt_audio.mp3"
+
+        self.audio_file = "/tmp/openai_audio.wav"
+        self.mp3_audio_file = "/tmp/openai_audio.mp3"
         # Set the speaker volume to maximum for mini pupper v2
         # If you are using a different robot, please comment out the lines
         self.volume_gain_multiplier = config.volume_gain_multiplier
-        self.declare_parameter("mini_pupper", False)  # default is False
-        self.is_mini_pupper = self.get_parameter("mini_pupper").value
+        self.declare_parameter("real_hardware", False)  # default is False
+        self.is_mini_pupper = self.get_parameter("real_hardware").value
         if self.is_mini_pupper:
             self.get_logger().info("Mini pupper v2 mode is enabled.")
             os.system("amixer -c 0 sset 'Headphone' 100%")
@@ -75,14 +73,14 @@ class AudioInput(Node):
                 "Volume gain multiplier is set to 30 for mini pupper v2."
             )
         # GPT status initialization
-        self.gpt_operation = GPTStatusOperation()
+        self.gpt_operation = RailbotStatusOperation()
         # Audio input initialization status for console output
         self.get_logger().info("Audio input successfully initialized.")
 
     def run_audio_input_callback(self):
-        gpt_current_status_value = self.gpt_operation.get_gpt_status_value()
+        gpt_current_status_value = self.gpt_operation.get_railbot_status_value()
         # Check if GPT status is WAITING_USER_INPUT
-        if gpt_current_status_value == GPTStatus.WAITING_USER_INPUT.name:
+        if gpt_current_status_value == RailbotStatus.WAITING_USER_INPUT.name:
             self.run_audio_input()
 
     def run_audio_input(self):
@@ -105,9 +103,9 @@ class AudioInput(Node):
 
         self.get_logger().info("Audio recording complete!")
 
-        # Set GPT status to SPEECH_TO_TEXT_PROCESSING
-        self.gpt_operation.set_gpt_status_value(
-            GPTStatus.SPEECH_TO_TEXT_PROCESSING.name
+        # Set GPT status to STT_PROCESSING
+        self.gpt_operation.set_railbot_status_value(
+            RailbotStatus.STT_PROCESSING.name
         )
 
         # save as WAV
@@ -116,11 +114,11 @@ class AudioInput(Node):
         # convert wav to mp3 with pydub
         audio = AudioSegment.from_wav(self.audio_file)
         audio.export(self.mp3_audio_file, format='mp3')
-        
+
         with open(self.mp3_audio_file, "rb") as f:
             # audio_bytes = f.read()
             transcript = client.audio.transcriptions.create(
-                model="whisper-1", 
+                model="whisper-1",
                 file=f
             )
 

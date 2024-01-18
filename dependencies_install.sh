@@ -2,7 +2,7 @@
 #
 # This script configures dependencies for audio recording and play test.
 # Version: 1.1
-# Author: Herman Ye @Mangdang
+# Author: Daniel Walmsley @Mangdang
 # Date: 2023-06-04
 
 # Exit the script immediately if a command exits with a non-zero status

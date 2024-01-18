@@ -1,48 +1,89 @@
-# RailBot: An easy way to get started with robotics and multimodal models
+# RailBot: An easy way to get started with robotics and multimodal LLMs
 
 # Overview
 
-The purpose of RailBot is to enable anyone write and package code that can be run on real robots, with a focus on integrating cloud LLMs with embedded code and models for the purposes of learning and entertainment.
+The purpose of Railbot is to experiment with LLM integrations for real robots.
 
-I want this code to be as accessible as possible. I would love to get feedback on making setup simpler and more robust across as many developer environments as possible. I want to make it possible to become a robotics expert without ever needing anything more than a cheap Linux, Windows or Mac computer.
+Hopefully by following this guide you will be able to:
 
-I am gradually trying to generalize this code as well as introduce more sophisticated integration between LLMs, multimodal, vision and audio models (TTS/STT). My goal is to find ways to manage the trade-offs between on-device, on-premise and cloud computing to maximise the utility of these robots without requiring radical new technologies or approaches.
+- Install the necessary packages for ROS2 development with Langchain (MacOS and Linux supported, Windows coming soon)
+- Build a ROS2 "workspace", which is where you customize and configure your robot
+- Run a simple example with voice interaction and a simulated robot environment
+- If you have a Mini Pupper 2, then you can deploy this to a real robot. Other robots coming soon!
 
-One way to think about it might be "LangChain for robots" - a place where people can quickly implement new techniques and get feedback on them.
+Initial feature goals:
 
-- stt using https://platform.openai.com/docs/guides/speech-to-text
-- tts using https://platform.openai.com/docs/guides/text-to-speech
+- Uses [LangChain](https://github.com/langchain-ai/langchain) with [OpenAI APIs](https://platform.openai.com/) by default, to enable simple integration of cutting edge LLM techniques.
+- Built as a set of [ROS 2](https://docs.ros.org/en/humble/index.html) packages, enabling the code to run on real robots or in simulation.
+- Lightweight and developer friendly, utilizing the cross-platform [micromamba](https://mamba.readthedocs.io/en/latest/user_guide/micromamba.html) tool to ensure a consistent environment across Linux, MacOS and eventually Windows.
 
-Later, on-device audio:
-- stt using https://github.com/ros-ai/ros2_whisper?
-- tts using https://github.com/rhasspy/piper
+Ideally anyone who can write basic python code on laptop on in a web-based notebook should now be able to develop ROS2 code that can run on real robot hardware, or run in simulation locally within minimal overhead.
 
-Also, video / photos:
-- OpenCV + Oak D-Lite samples
-- integration with multi-modal LLMs like Gemini and GPT-4 Turbo
+## Why?
 
-Also, motion:
-- navigation and interaction using LLM function calling
+This project grew out of my own desire to write general-purpose code that could bring LLM-powered agent abilities, including those multi-modal chat LLMs, to low-cost enthusiast robotics hardware. I am starting with the [Mini Pupper 2](https://mangdang.store/products/mini-pupper-2-ai-robot-smart-robot-quadruped-robot-educational-robot-genuine-open-source-stem-k12) because that's what I have (and I recommend it! Great kit) but I hope to expand to other platforms soon.
 
-# Summary
+My pain points specifically were:
+- Missing ROS2 packages in Ubuntu for AArch64 (ARM64) architecture hindered Docker development on MacOS, and x86 in emulation was too slow and hard to configure
+- Migrated to x86 laptop out of frustration. Using Ubuntu in WSL2 (Windows) resulted in persistent USB issues, so...
+- Then I had to install a specific version of Ubuntu on a specific laptop just to be able to develop packages for my robot running on a Raspberry Pi, and configure the GRUB bootloader etc.
+- There has to be a better way!
 
-How it works on my Mini Pupper 2:
+Then I discovered a few magical hacks:
+- [RoboStack](https://robostack.github.io/index.html) is an elegant bundling of ROS2 packages as a Conda repo for a variety of platforms. Honestly, if it weren't for the fact that I'm also trying to do LLM integration, this whole repo could be replaced with the words "Go use RoboStack".
+- [Micromamba](https://mamba.readthedocs.io/en/latest/user_guide/micromamba.html) is a lightweight cross-compiled Conda-compatible package manager that allows us to load RoboStack and related dependencies in the fastest and most compatible manner possible. Unlike full Mamba, it does not have system dependencies like Python.
+- The many examples provided by MangDang, including [ChatGPT integration](https://github.com/mangdangroboticsclub/chatgpt-minipupper2-ros2-humble) and underlying [ROS packages](https://github.com/mangdangroboticsclub/mini_pupper_ros). Without their working examples it would have been impossible for me to get this far. Open Source is awesome!
 
-your voice ---> Mini Pupper 2 record by Mic x2 ---> translate voice to text by OpenAI STT service ---> chatGPT API ---> translate text to voice by OpenAI TTS service ---> Mini Pupper 2 voice Playback & Movement & emotion.
+Once I started to make progress on these, for example being able to run the same code on my Mac, x86 Linux machine and Raspberry Pi, I realized that this was something that could be useful to others as well.
+
+## Near Term Goals
+
+I would like this repo to be as accessible as possible all developers, including people who have never written software before at all. Please send me your feedback on making setup simpler and more robust across as many developer environments as possible.
+
+I am gradually trying to generalize this code as well as introduce more sophisticated integration between LLMs, multimodal, vision and audio models (TTS/STT). My goal is to find ways to manage the trade-offs between on-device, on-premise and cloud computing to maximise the utility and fun-factor of open source robots.
+
+Ideally over time we can work together to:
+
+- bring down perceived latency
+- bring these packages to more robot platforms
+- add multimodal abilities, initially focused on Oak-D Lite and LIDAR to image uploads
+- add planning abilities using function calling back to robot and virtualizing navigation across form factors
+- streamline the developer experience on all developer platforms (including Windows)
+- implement modules for cutting edge Robot/LLM techniques
+- implement HuggingFace support
+- implement support for running against local LLMs on the same network, without having to go to the cloud
+- implement privacy controls for any data that is sent to the cloud, e.g. to ChatGPT-with-vision
+- broaden library and language support, perhaps add Semantic Kernel or AutoGen examples
+- provide tons of examples as notebooks or runnable SD card images
+- provide training examples using data gathered from the device to fine tune models from HF, etc.
+- implement the ability to capture and post-process data logs completely on-premise
+
+## Default APIs
+
+- Chat Completions using the [OpenAI Chat Completions API](https://platform.openai.com/docs/guides/text-generation/chat-completions-api)
+- stt using [OpenAI STT](https://platform.openai.com/docs/guides/speech-to-text)
+- tts using [OpenAI TTS](https://platform.openai.com/docs/guides/text-to-speech)
+- planned: [ChatGPT with Vision](https://platform.openai.com/docs/guides/vision)
+
+## Why Micromamba? Why not Docker?
+
+My personal workstation is an M2 Mac. My experience using Docker or UTM or other virtualization systems is that they have trouble talking to real hardware plugged in via USB or other interfaces. The Conda/Mamba/Micromamba packaging system provides just enough cross-platform abstraction while still compiling to the host OS and allowing for direct hardware access where necessary.
+
+I am open to revisiting this decision as the project evolves. This was a tough one.
 
 # Installation
+
+Everything from here down is totally a work in progress.
 
 ## Installing ROS 2 on MacOS (may work on Linux too)
 
 ### Setup Environment
 
-We assume a working micromamba environment.
-
 > [!TIP]
 > On macOS, make sure you install [Xcode](https://apps.apple.com/app/xcode/id497799835).
 
 > [!TIP]
-> On macOS with homebrew, you can get `micromamba` by running `brew install micromamba`.
+> On macOS with homebrew, you can get `micromamba` by running `brew install micromamba`. This may be preferable to the default, which is executing `micro.mamba.pm/install.sh` directly.
 
 The `setup.sh` script does the following:
  * installs `micromamba` if necessary. This tool is used to create isolated environments and install packages.
@@ -59,6 +100,7 @@ The `setup.sh` script does the following:
 
 Also, might be useful, from the [ROS 2 MacOS docs](https://docs.ros.org/en/iron/Installation/Alternatives/macOS-Development-Setup.html#disable-system-integrity-protection-sip):
 
+> [!TIP]
 > macOS/OS X versions >=10.11 have System Integrity Protection enabled by default. So that SIP doesn’t prevent processes from inheriting dynamic linker environment variables, such as DYLD_LIBRARY_PATH, you’ll need to disable it following [these instructions](https://developer.apple.com/library/content/documentation/Security/Conceptual/System_Integrity_Protection_Guide/ConfiguringSystemIntegrityProtection/ConfiguringSystemIntegrityProtection.html).
 
 Confirm that your environment is working by running rvis2:
@@ -67,13 +109,16 @@ Confirm that your environment is working by running rvis2:
 rvis2
 ```
 
-### Updating Packages
+### Updating environment packages
 
 If you want to update packages later, run this:
 
 ```bash
+micromamba activate railbot
 micromamba update --all
 ```
+
+This only applies to micromamba-managed packages. If you want to update pip packages, you'll need to do that manually.
 
 ### Running Commands
 
@@ -89,27 +134,34 @@ ROS_OS_OVERRIDE=conda:osx
 ROS_ETC_DIR=/Users/daniel/micromamba/envs/railbot/etc/ros
 ```
 
-### Run `rvis2`
+#### Run `rvis2`
+
+`rvis2` is an [open source robotics visualization tool](https://github.com/ros2/rviz) that can display the status of your robot in 3D.
 
 ```bash
 rviz2
 ```
 
-### Run `ros2`
+#### Run `ros2`
 
 `ros2` is a command-line tool for ROS 2.
 
 Here's a few examples:
 
 ```bash
-ros2 wtf # list out of date packages and other possible issues
-ros2 interface list # list interfaces (like IDL) for things like goals, sensor data, etc.
-ros2 topic list # list topics that can be subscribed to which will emit or receive structured data
-ros2 run demo_nodes_cpp talker # run a node that emits "Hello World {N}" messages
-ros2 run demo_nodes_cpp listener # listen for messages from the previous node
+# list out of date packages and other possible issues
+ros2 wtf
+# list interfaces (like IDL) for things like goals, sensor data, etc.
+ros2 interface list
+# list topics that can be subscribed to which will emit or receive structured data
+ros2 topic list
+# run a node that emits "Hello World {N}" messages - this is included with ROS2
+ros2 run demo_nodes_cpp talker
+# listen for messages from the previous node
+ros2 run demo_nodes_cpp listener
 ```
 
-### Run `rqt_graph`
+#### Run `rqt_graph`
 
 Once you have some ROS 2 nodes running, you can visualize them using `rqt_graph`
 
@@ -119,7 +171,7 @@ rqt_graph
 
 Try running this app, then running the `talker` example above, then click the "refresh" button. Then run the `listener` example and refresh again. You should see the nodes appearing and disappearing, including their topic subscriptions.
 
-### Using JupyterROS
+#### Using JupyterROS
 
 Adapted from https://github.com/RoboStack/jupyter-ros
 
@@ -148,94 +200,9 @@ When you click in the small black square and press the arrow keys on your keyboa
 
 Now try `ROS2_Turtlesim_KeyboardControl`. After clicking start, click on the smaller blue square and then scroll to view the turtle. Then you can use the arrow keys to turn and move the turtle forwards and backwards.
 
-### Running VisualROS with Node RED
-
-VisualROS is a way of creating ROS nodes visually in the browser. The Docker images don't work so we need to build against the OS in our micromanba environment.
-
-Read more [here](https://github.com/eProsima/node-red-ros2-plugin).
-
-```bash
-npm install -g node-red
-
-# also need this for compilation to work
-# micromamba install -c conda-forge websocketpp
-brew install websocketpp
-# or, on Ubuntu: sudo apt install websocketpp-dev
-```
-
-Now we install the eProsima "integration service" in the ROS 2 workspace.
-
-```bash
-cd $RAILBOT_WS/src
-git clone https://github.com/eProsima/Integration-Service.git is
-git clone https://github.com/eProsima/WebSocket-SH.git
-git clone https://github.com/eProsima/ROS2-SH.git
-git clone https://github.com/eProsima/FIWARE-SH.git
-
-# not necessary on macos?
-# . /opt/ros/humble/setup.sh # customize the ROS2 distro: foxy, galactic, humble ...
-cd $RAILBOT_WS
-colcon build --symlink-install  --cmake-args -DIS_ROS2_SH_MODE=DYNAMIC -DPython3_FIND_VIRTUALENV=ONLY -Dwebsocketpp_DIR=/opt/homebrew/Cellar/websocketpp/0.8.2/lib/cmake/websocketpp/
-```
-
-Then initialize your workspace environment and run `integration-service` as a test:
-
-```bash
-. ./install/local_setup.zsh
-```
-
-Now we install the node-red plugin:
-
-```bash
-$ npm install -g node-red-ros2-plugin
-```
-
-And run node-red:
-
-```bash
-node-red
-```
-
-### Totally different approach: Vulcanexus
-
-Adapted for macOS from [these instructions](https://docs.vulcanexus.org/en/latest/rst/installation/docker.html).
-
-1. Install [XQuartz](https://www.xquartz.org/)
-2. Install [Docker Desktop](https://www.docker.com/products/docker-desktop)
-3. Open XQuartz and go to Preferences > Security and check the box for "Allow connections from network clients"
-4. Restart XQuartz
-
-Then in Terminal:
-
-```bash
-xhost local:root # might not be necessary with config change above? but is probably needed for Linux hosts
-docker run \
-    -it \
-    --privileged \
-    --net host \
-    --ipc host \
-    -e DISPLAY=$DISPLAY \
-    -v /tmp/.X11-unix:/tmp/.X11-unix \
-    eprosima/vulcanexus:iron-desktop
-```
-
-### Using with FoxGlove
-
-TODO: can't make it work on macOS
-
-FoxGlove is a development tool that can help visualize your robot. It requires installing a special [foxglove_bridge](https://github.com/foxglove/ros-foxglove-bridge) Ros node in your workspace.
-
-```
-cd <path/to/your/ros_ws>
-git clone https://github.com/foxglove/ros-foxglove-bridge.git src/ros-foxglove-bridge
-rosdep update # not necessary on macos?
-rosdep install --ignore-src --default-yes --from-path src # might fail
-colcon build --event-handlers console_direct+ --symlink-install --cmake-args  -DPython3_FIND_VIRTUALENV=ONLY
-```
-
 ### Build the packages
 
-> *NOTE:* rosdep may not be necessary/useful on macOS?
+> [!TIP] rosdep may not be necessary/useful on macOS? This whole section might be irrelevant.
 
 If you haven't done this yet, you'll need to initialize [rosdep](https://wiki.ros.org/rosdep). This is a command line tool for installing the system dependencies required by ROS packages.
 
@@ -318,14 +285,14 @@ And now we can run it:
 
 ```bash
 % pip install openai
-% OPENAI_API_KEY="sk-..." ros2 run gpt_main gpt_ros2_server
+% OPENAI_API_KEY="sk-..." ros2 run railbot_main gpt_ros2_server
 [INFO] [1702827350.339493666] [gpt_ros2_server]: GPT Server is ready.
 ```
 
 And the client:
 
 ```bash
-% ros2 run gpt_main gpt_ros2_client
+% ros2 run railbot_main gpt_ros2_client
 [INFO] [1702828717.243596012] [gpt_ros2_client]: GPT Client is ready.
 You: What is your name?
 
@@ -336,7 +303,7 @@ Mini Pupper: My name is Mini Pupper. Woof!
 
 ```bash
 source ./install/local_setup.sh
-OPENAI_API_KEY="sk-..." ros2 launch gpt_bringup gpt_bringup_launch.py mini_pupper:=False
+OPENAI_API_KEY="sk-..." ros2 launch railbot_bringup mini_pupper_launch.py real_hardware:=False
 ```
 
 Now when you see `Starting audio recording...` try saying a few words. After capturing a few seconds of audio, it sends it to OpenAI to be converted into text. Then, it sends the Text to the Chat Completions endpoint to compute a response. Finally, it converts the response text back into speech using _another_ API. No wonder it takes so long to reply!
@@ -351,12 +318,12 @@ Here's some example output:
 [audio_input-4] [INFO] [1702829137.701167975] [gpt.audio_input]: Starting audio recording...
 [audio_input-4] [INFO] [1702829144.885283700] [gpt.audio_input]: Audio recording complete!
 [audio_input-4] Set parameter successful
-[gpt_param_server-1] [INFO] [1702829145.691914830] [gpt.gpt_param_server]: GPT status: "SPEECH_TO_TEXT_PROCESSING"
+[railbot_param_server-1] [INFO] [1702829145.691914830] [gpt.railbot_param_server]: GPT status: "STT_PROCESSING"
 [audio_input-4] [INFO] [1702829150.759706228] [gpt.audio_input]: Audio Input Node publishing:
 [audio_input-4] 'This is a test.'
 [gpt_service-2] [INFO] [1702829150.760200314] [gpt.gpt_service]: GPT node has received: This is a test.
 [gpt_service-2] Set parameter successful
-[gpt_param_server-1] [INFO] [1702829151.670866539] [gpt.gpt_param_server]: GPT status: "GPT_PROCESSING"
+[railbot_param_server-1] [INFO] [1702829151.670866539] [gpt.railbot_param_server]: GPT status: "CHAT_LLM_PROCESSING"
 [gpt_service-2] [INFO] [1702829151.776636563] [gpt.gpt_service]: GPT node is processing: This is a test.
 [gpt_service-2] [INFO] [1702829151.777072858] [gpt.gpt_service]: user_input_processor has finished.
 [gpt_service-2] [INFO] [1702829152.709136356] [gpt.gpt_service]: generate_chat_completion has finished.
@@ -364,9 +331,9 @@ Here's some example output:
 [gpt_service-2] [INFO] [1702829152.710320656] [gpt.gpt_service]: GPT service node has published: std_msgs.msg.String(data='Woof! Hello, how can Mini Pupper help you today?')
 [audio_output-3] [INFO] [1702829152.712106585] [gpt.audio_output]: Received text: 'Woof! Hello, how can Mini Pupper help you today?'
 [audio_output-3] Set parameter successful
-[gpt_param_server-1] [INFO] [1702829153.667098451] [gpt.gpt_param_server]: GPT status: "TEXT_TO_SPEECH_PROCESSING"
+[railbot_param_server-1] [INFO] [1702829153.667098451] [gpt.railbot_param_server]: GPT status: "TTS_PROCESSING"
 [audio_output-3] Set parameter successful
-[gpt_param_server-1] [INFO] [1702829156.168938990] [gpt.gpt_param_server]: GPT status: "ROBOT_ACTION"
+[railbot_param_server-1] [INFO] [1702829156.168938990] [gpt.railbot_param_server]: GPT status: "ROBOT_ACTION"
 [audio_output-3] [ffmpeg/demuxer] mp3: Estimating duration from bitrate, this may be inaccurate
 [audio_output-3]  (+) Audio --aid=1 (mp3 1ch 24000Hz)
 [audio_output-3] AO: [coreaudio] 24000Hz mono 1ch floatp
@@ -453,13 +420,13 @@ export OPENAI_API_KEY="..."
 Then, to run it:
 
 ```bash
-bash -c 'ros2 run gpt_main gpt_ros2_server'
+bash -c 'ros2 run railbot_main gpt_ros2_server'
 ```
 
 In another terminal:
 
 ```bash
-bash -c 'ros2 run gpt_main gpt_ros2_client'
+bash -c 'ros2 run railbot_main gpt_ros2_client'
 ```
 
 ## One-click Installation
@@ -523,9 +490,9 @@ To use the gpt4_ros2 package, follow these steps:
 6. Copy your secret key and save it securely.
 
 #### 4.3 Configure and build the package
-1. Navigate to `<your_ws>/src/gpt4-turbo-minipupper2-ros2-humble/gpt_status/gpt_status/gpt_config.py`.
+1. Navigate to `<your_ws>/src/gpt4-turbo-minipupper2-ros2-humble/railbot_status/railbot_status/gpt_config.py`.
 ```bash
-cd <your_ws>/src/gpt4-turbo-minipupper2-ros2-humble/gpt_status/gpt_status
+cd <your_ws>/src/gpt4-turbo-minipupper2-ros2-humble/railbot_status/railbot_status
 ```
 2. Set your desired configurations, such as the GPT-4 or GPT-3.5-turbo model, system_prompt, and other attributes. Fill in the relevant configuration details for OpenAI that you obtained earlier.
 ```bash
@@ -535,7 +502,7 @@ sudo nano gpt_config.py
 #### 4.4 Modify the gpt_robot package code [optional]
 If you wish to use GPT for your own robots, modify the contents of the gpt_robot package, which configures physical or virtual robots.
 
-We encourage you to customize the GPTConfig class to tailor the functionality of this ROS2 wrapper for GPT-4 and ChatGPT (GPT-3.5) according to your specific needs. To do this, simply modify the values in the code snippet to suit your requirements:
+We encourage you to customize the RailbotConfig class to tailor the functionality of this ROS2 wrapper for GPT-4 and ChatGPT (GPT-3.5) according to your specific needs. To do this, simply modify the values in the code snippet to suit your requirements:
 
 GPT-4 is currently in a limited beta and only accessible to those who have been granted access. Please join the [waitlist](https://openai.com/waitlist/gpt-4-api) to get access when capacity is available.
 
@@ -548,16 +515,16 @@ By personalizing these settings, you can create a one-of-a-kind experience tailo
 
 ## Demo 1: Simple GPT call on the PC
 
-If you want to simply try this service, configure your OpenAI API and system_prompt in `gpt_status/gpt_config.py`. Then, try:
+If you want to simply try this service, configure your OpenAI API and system_prompt in `railbot_status/gpt_config.py`. Then, try:
 
 ```bash
 # Terminal 1
-ros2 run gpt_main gpt_ros2_server
+ros2 run railbot_main gpt_ros2_server
 ```
 
 ```bash
 # Terminal 2
-ros2 run gpt_main gpt_ros2_client
+ros2 run railbot_main gpt_ros2_client
 ```
 
 ## Demo 2: GPT service on Mini Pupper 2
@@ -566,26 +533,11 @@ After configuring everything, run the below commands on Mini Pupper 2:
 ```bash
 # Terminal 1 Bringup mini pupper
 . ~/ros2_ws/install/setup.bash
-ros2 launch mini_pupper_bringup bringup.launch.py
+ros2 launch railbot_bringup bringup.launch.py
 ```
 ```bash
-# Terminal 2 Bringup GPT
-ros2 launch gpt_bringup gpt_bringup_launch.py mini_pupper:=True
+# Terminal 2 Bringup RailBot
+ros2 launch railbot_bringup mini_pupper_launch.py real_hardware:=True
 ```
 
-# License
-This project is licensed under the Apache-2.0 License.
-```
-Copyright 2023 Mangdang
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-```
-
-ROS2 Humble modules originally forked from [MangDang Robotics Club example for the Mini Pupper 2](https://github.com/mangdangroboticsclub/chatgpt-minipupper2-ros2-humble).
+Huge thanks to MangDang Robotics Club for the [high quality examples for the Mini Pupper 2](https://github.com/mangdangroboticsclub/chatgpt-minipupper2-ros2-humble) which made all this possible. Go buy their robots!

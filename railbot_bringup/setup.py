@@ -2,7 +2,7 @@ import os
 from glob import glob
 from setuptools import setup
 
-package_name = "gpt_bringup"
+package_name = "railbot_bringup"
 
 setup(
     name=package_name,
@@ -19,10 +19,10 @@ setup(
             glob(os.path.join("launch", "*launch.[pxy][yma]*")),
         ),
     ],
-    install_requires=["setuptools", "gpt_status"],
+    install_requires=["setuptools", "railbot_status"],
     zip_safe=True,
-    maintainer="Herman Ye",
-    maintainer_email="hermanye233@icloud.com",
+    maintainer="Daniel Walmsley",
+    maintainer_email="dan@gravityrail.com",
     description="GPT-4 Bringup package for ROS2",
     license="Apache-2.0",
     tests_require=["pytest"],

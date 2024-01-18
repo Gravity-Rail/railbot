@@ -4,7 +4,7 @@
   <name>gpt_interfaces</name>
   <version>0.0.1</version>
   <description>Interfaces for gpt4_ros package</description>
-  <maintainer email="hermanye233@icloud.com">Herman Ye</maintainer>
+  <maintainer email="dan@gravityrail.com">Daniel Walmsley</maintainer>
   <license>Apache-2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>

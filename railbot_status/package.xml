@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>gpt_status</name>
+  <name>railbot_status</name>
   <version>0.0.1</version>
   <description>Status package for GPT</description>
-  <maintainer email="hermanye233@icloud.com">Herman Ye</maintainer>
+  <maintainer email="dan@gravityrail.com">Daniel Walmsley</maintainer>
   <license>Apache-2.0</license>
 
   <test_depend>ament_copyright</test_depend>

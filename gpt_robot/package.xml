@@ -4,10 +4,10 @@
   <name>gpt_robot</name>
   <version>0.0.1</version>
   <description>Your Robot part for gpt4_ros2 package</description>
-  <maintainer email="hermanye233@icloud.com">Herman Ye</maintainer>
+  <maintainer email="dan@gravityrail.com">Daniel Walmsley</maintainer>
   <license>Apache-2.0</license>
 
-  <depend>gpt_status</depend>
+  <depend>railbot_status</depend>
 
   <exec_depend>gpt_interfaces</exec_depend>
 

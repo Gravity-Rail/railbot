@@ -61,7 +61,7 @@ echo "source $ROS2_WS_DIR/install/setup.bash" >>~/.bashrc
 
 # Ask user for GPT API_KEY
 read -p "Enter your GPT API_KEY: " API_KEY
-cd $ROS2_WS_DIR/src/railbot/gpt_status/gpt_status
+cd $ROS2_WS_DIR/src/railbot/railbot_status/railbot_status
 pwd
 sudo sed -i "s#<YOUR_API_KEY>#$API_KEY#" gpt_config.py
 if [[ $? -eq 0 ]]; then
@@ -72,8 +72,8 @@ fi
 # print success message and wait for user to press any key to run the server and client
 echo "Press any key to run Demo 1: Simple robot GPT call on the PC side."
 read -p "If you need to run a more advanced demo, please read the readme.md file under the railbot package." -n1 -s
-gnome-terminal --disable-factory -- bash -c 'ros2 run gpt_main gpt_ros2_server' &
-gnome-terminal --disable-factory -- bash -c 'ros2 run gpt_main gpt_ros2_client' &
+gnome-terminal --disable-factory -- bash -c 'ros2 run railbot_main gpt_ros2_server' &
+gnome-terminal --disable-factory -- bash -c 'ros2 run railbot_main gpt_ros2_client' &
 
 # Exit the script with a success status code
 exit 0

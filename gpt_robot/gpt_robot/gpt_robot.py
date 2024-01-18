@@ -1,51 +1,24 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# flake8: noqa
-#
-# Copyright 2023 MangDang
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-# Description:
-# This is a ROS node called GPTRobot that simulates a robot capable of performing actions and interacting with users.
-# The robot can display different states (TROT, HOP, SHUTDOWN), nod and shake its head, and play music.
-# The code defines a GPTRobot class, which extends the Node class and sets up a series of publishers, timers, and a GPT status system.
-# The main logic of the robot's behavior is performed in the robot_behavior_callback function, which responds to different GPT statuses.
-# Additionally, several helper functions are defined for head movements, music playback, and path handling.
-#
-# Author: Herman Ye
 
-# ROS related
 import rclpy
 from time import sleep
 from rclpy.node import Node
 from geometry_msgs.msg import Pose
 
-# GPT related
-from gpt_status.gpt_param_server import GPTStatus, GPTStatusOperation
-from gpt_status.gpt_config import GPTConfig
-
-# Display
-from enum import Enum
-from MangDang.mini_pupper.display import Display
+# RailBot
+from railbot_status.railbot_param_server import RailbotStatus, RailbotStatusOperation
+from railbot_status.railbot_config import RailbotConfig
 
 # Other libraries
 import os
+from enum import Enum
 import threading
 import numpy as np
 
-config = GPTConfig()
+# Mini Pupper
+from MangDang.mini_pupper.display import Display
 
+config = RailbotConfig()
 
 # For display
 class BehaviorState(Enum):
@@ -59,8 +32,7 @@ class BehaviorState(Enum):
     TEST = 98
     LOWBATTERY = 99
 
-
-class GPTRobot(Node):
+class MiniPupperRobot(Node):
     def __init__(self):
         super().__init__("gpt_robot")
         # Publisher
@@ -68,9 +40,9 @@ class GPTRobot(Node):
         # Timer
         self.create_timer(0.5, self.robot_behavior_callback)
         # GPT status
-        self.gpt_operation = GPTStatusOperation()
+        self.gpt_operation = RailbotStatusOperation()
         self.gpt_current_status_value = (
-            self.gpt_operation.get_gpt_status_value()
+            self.gpt_operation.get_railbot_status_value()
         )
 
         # Display
@@ -78,8 +50,8 @@ class GPTRobot(Node):
         # Display
         self.display.show_state(BehaviorState.TROT)
         # Status parameter
-        self.declare_parameter("mini_pupper", False)  # default is False
-        self.is_mini_pupper = self.get_parameter("mini_pupper").value
+        self.declare_parameter("real_hardware", False)  # default is False
+        self.is_mini_pupper = self.get_parameter("real_hardware").value
         self.get_logger().info("GPT robot node started successfully.")
 
     def nod_head(self):
@@ -152,34 +124,34 @@ class GPTRobot(Node):
 
     def robot_behavior_callback(self):
         self.gpt_current_status_value = (
-            self.gpt_operation.get_gpt_status_value()
+            self.gpt_operation.get_railbot_status_value()
         )
-        if self.gpt_current_status_value == GPTStatus.ROBOT_ACTION.name:
+        if self.gpt_current_status_value == RailbotStatus.ROBOT_ACTION.name:
             shake_head_thread = threading.Thread(target=self.shake_head)
             shake_head_thread.start()
             # Display
             self.display.show_state(BehaviorState.TROT)
 
-            self.gpt_operation.set_gpt_status_value(
-                GPTStatus.WAITING_USER_INPUT.name
+            self.gpt_operation.set_railbot_status_value(
+                RailbotStatus.WAITING_USER_INPUT.name
             )
             self.get_logger().info("Returning to WAITING_USER_INPUT.")
         elif (
-            self.gpt_current_status_value == GPTStatus.WAITING_USER_INPUT.name
+            self.gpt_current_status_value == RailbotStatus.WAITING_USER_INPUT.name
         ):
             # Display
             self.display.show_state(BehaviorState.TROT)
 
         elif (
             self.gpt_current_status_value
-            == GPTStatus.SPEECH_TO_TEXT_PROCESSING.name
+            == RailbotStatus.STT_PROCESSING.name
         ):
             # Display
             self.display.show_state(BehaviorState.HOP)
             play_music_thread = threading.Thread(target=self.play_music)
             play_music_thread.start()
             self.nod_head()  # Multi-threaded implementation
-        elif self.gpt_current_status_value == GPTStatus.GPT_PROCESSING.name:
+        elif self.gpt_current_status_value == RailbotStatus.CHAT_LLM_PROCESSING.name:
             # Display
             self.display.show_state(BehaviorState.HOP)
             play_music_thread = threading.Thread(target=self.play_music)
@@ -187,7 +159,7 @@ class GPTRobot(Node):
             self.nod_head()  # Multi-threaded implementation
         elif (
             self.gpt_current_status_value
-            == GPTStatus.TEXT_TO_SPEECH_PROCESSING.name
+            == RailbotStatus.TTS_PROCESSING.name
         ):
             # Display
             self.display.show_state(BehaviorState.TROT)
@@ -218,7 +190,7 @@ class GPTRobot(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    gpt_robot = GPTRobot()
+    gpt_robot = MiniPupperRobot()
     rclpy.spin(gpt_robot)
     gpt_robot.destroy_node()
     rclpy.shutdown()
