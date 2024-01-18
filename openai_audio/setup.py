@@ -1,6 +1,6 @@
 from setuptools import setup
 
-package_name = "gpt_audio"
+package_name = "openai_audio"
 
 setup(
     name=package_name,
@@ -22,8 +22,8 @@ setup(
     tests_require=["pytest"],
     entry_points={
         "console_scripts": [
-            "audio_input = gpt_audio.audio_input:main",
-            "audio_output = gpt_audio.audio_output:main",
+            "audio_input = openai_audio.audio_input:main",
+            "audio_output = openai_audio.audio_output:main",
         ],
     },
 )

@@ -17,7 +17,7 @@ setup(
     zip_safe=True,
     maintainer="Daniel Walmsley",
     maintainer_email="dan@gravityrail.com",
-    description="Your Robot part for gpt4_ros2 package",
+    description="Mini Pupper integration for Railbot",
     license="Apache-2.0",
     tests_require=["pytest"],
     entry_points={

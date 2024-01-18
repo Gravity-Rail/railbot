@@ -1,6 +1,6 @@
 This code defines a `MiniPupperRobot` class that extends the `Node` class and responsible for controlling the head behavior of a MiniPupper robot.
 
-This code has been adapted from the excellent work by MangDang at
+Some of this code has been adapted from the excellent work by MangDang at https://github.com/mangdangroboticsclub/chatgpt-minipupper2-ros2-humble.
 
 The status values used by the MiniPupperRobot are:
 
@@ -17,7 +17,7 @@ WAITING_USER_INPUT, ROBOT_ACTION, STT_PROCESSING, CHAT_LLM_PROCESSING, and TTS_P
 
 ## Usage
 
-To use the `MiniPupperRobot` class, simply create an instance and start the node. The robot will automatically respond to the GPT status values, showing the appropriate animation and head movement depending on the robot's current status.
+To use the `MiniPupperRobot` class, simply create an instance and start the node. The robot will automatically respond to the Railbot Romoji status values, showing the appropriate animation and head movement depending on the robot's current status.
 
 Below is a brief explanation of each method and their animations:
 

@@ -45,6 +45,7 @@ I am gradually trying to generalize this code as well as introduce more sophisti
 Ideally over time we can work together to:
 
 - bring down perceived latency
+- further to that ^^, add parallelisation abilities, e.g. fetching next part of response while responding
 - bring these packages to more robot platforms
 - add multimodal abilities, initially focused on Oak-D Lite and LIDAR to image uploads
 - add planning abilities using function calling back to robot and virtualizing navigation across form factors
@@ -57,6 +58,7 @@ Ideally over time we can work together to:
 - provide tons of examples as notebooks or runnable SD card images
 - provide training examples using data gathered from the device to fine tune models from HF, etc.
 - implement the ability to capture and post-process data logs completely on-premise
+- create new standards that enable rapid adaptation across Robot platforms, e.g. "Romoji" (my word) for describing Robot emotes, e.g. :shrug:
 
 ## Default APIs
 
@@ -98,10 +100,7 @@ The `setup.sh` script does the following:
 . ./setup.sh
 ```
 
-Also, might be useful, from the [ROS 2 MacOS docs](https://docs.ros.org/en/iron/Installation/Alternatives/macOS-Development-Setup.html#disable-system-integrity-protection-sip):
-
-> [!TIP]
-> macOS/OS X versions >=10.11 have System Integrity Protection enabled by default. So that SIP doesn’t prevent processes from inheriting dynamic linker environment variables, such as DYLD_LIBRARY_PATH, you’ll need to disable it following [these instructions](https://developer.apple.com/library/content/documentation/Security/Conceptual/System_Integrity_Protection_Guide/ConfiguringSystemIntegrityProtection/ConfiguringSystemIntegrityProtection.html).
+> [!TIP] Also, might be useful, from the [ROS 2 MacOS docs](https://docs.ros.org/en/iron/Installation/Alternatives/macOS-Development-Setup.html#disable-system-integrity-protection-sip) (TODO: Confirm this is necessary):
 
 Confirm that your environment is working by running rvis2:
 
@@ -244,7 +243,7 @@ mkdir -p $RAILBOT_WS/src
 cd $RAILBOT_WS/src
 ```
 
-On Linux you would run `rosdep` right now, but on MacOS we don't. We use `brew` and `conda` to install system-level dependencies instead.
+On Linux you would run `rosdep` right now, but on MacOS we don't. We use `brew` and `micromamba` (or `conda`, if you prefer) to install system-level dependencies instead.
 
 Now let's symlink our source into the workspace.
 
@@ -397,17 +396,16 @@ cd railbot_ros2_ws/src
 # check out the code
 git clone git@github.com:Gravity-Rail/railbot
 cd railbot
+. ./setup.sh
 
-# install Python dependencies for Linux
-. dependencies_install.sh
-
-# install ROS dependencies
+# install ROS dependencies - TODO not necessary on MacOS? Or at all?
 cd ~/railbot_ros2_ws
 rosdep install --from-paths src --ignore-src -r -y
 
 # build the package
 source /opt/ros/humble/setup.bash
-colcon build --symlink-install
+# TODO: check if virtualenv breaks things on the Pi
+colcon build --symlink-install --cmake-args -DPython3_FIND_VIRTUALENV=ONLY
 ```
 
 Modify your ~/.bashrc to include the following lines:
@@ -415,18 +413,6 @@ Modify your ~/.bashrc to include the following lines:
 ```bash
 . $HOME/railbot_ros2_ws/install/setup.bash
 export OPENAI_API_KEY="..."
-```
-
-Then, to run it:
-
-```bash
-bash -c 'ros2 run railbot_main gpt_ros2_server'
-```
-
-In another terminal:
-
-```bash
-bash -c 'ros2 run railbot_main gpt_ros2_client'
 ```
 
 ## One-click Installation
@@ -461,14 +447,6 @@ cd <your_ws>/src
 git clone https://github.com/Gravity-Rail/railbot.git
 ```
 
-### Step 2: Install dependencies
-
-```bash
-cd <your_ws>/src/gpt4-turbo-minipupper2-ros2-humble
-sudo chmod +x dependencies_install.sh
-. dependencies_install.sh # Install dependencies
-```
-
 ### Step 3: Build the repo
 
 ```bash
@@ -489,52 +467,19 @@ To use the gpt4_ros2 package, follow these steps:
 5. Enter a `name` and click `Create secret key`.
 6. Copy your secret key and save it securely.
 
-#### 4.3 Configure and build the package
-1. Navigate to `<your_ws>/src/gpt4-turbo-minipupper2-ros2-humble/railbot_status/railbot_status/gpt_config.py`.
-```bash
-cd <your_ws>/src/gpt4-turbo-minipupper2-ros2-humble/railbot_status/railbot_status
-```
-2. Set your desired configurations, such as the GPT-4 or GPT-3.5-turbo model, system_prompt, and other attributes. Fill in the relevant configuration details for OpenAI that you obtained earlier.
-```bash
-sudo nano gpt_config.py
-```
-
-#### 4.4 Modify the gpt_robot package code [optional]
-If you wish to use GPT for your own robots, modify the contents of the gpt_robot package, which configures physical or virtual robots.
-
-We encourage you to customize the RailbotConfig class to tailor the functionality of this ROS2 wrapper for GPT-4 and ChatGPT (GPT-3.5) according to your specific needs. To do this, simply modify the values in the code snippet to suit your requirements:
-
-GPT-4 is currently in a limited beta and only accessible to those who have been granted access. Please join the [waitlist](https://openai.com/waitlist/gpt-4-api) to get access when capacity is available.
-
-Feel free to adjust the parameters, such as temperature, max_tokens, and top_p, to influence the behavior of the GPT model. You can also customize the system_prompt and user_prompt strings to create unique and engaging interactions with your robot.
-
-By personalizing these settings, you can create a one-of-a-kind experience tailored to your specific robotic application. Enjoy experimenting and discovering new possibilities!
-
 
 # Usage
 
-## Demo 1: Simple GPT call on the PC
-
-If you want to simply try this service, configure your OpenAI API and system_prompt in `railbot_status/gpt_config.py`. Then, try:
-
-```bash
-# Terminal 1
-ros2 run railbot_main gpt_ros2_server
-```
-
-```bash
-# Terminal 2
-ros2 run railbot_main gpt_ros2_client
-```
-
-## Demo 2: GPT service on Mini Pupper 2
+## Demo: OpenAI-based interaction on Mini Pupper 2
 
 After configuring everything, run the below commands on Mini Pupper 2:
+
 ```bash
 # Terminal 1 Bringup mini pupper
 . ~/ros2_ws/install/setup.bash
 ros2 launch railbot_bringup bringup.launch.py
 ```
+
 ```bash
 # Terminal 2 Bringup RailBot
 ros2 launch railbot_bringup mini_pupper_launch.py real_hardware:=True

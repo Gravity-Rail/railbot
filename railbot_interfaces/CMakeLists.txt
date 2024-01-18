@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(gpt_interfaces)
+project(railbot_interfaces)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -10,7 +10,7 @@ find_package(ament_cmake REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
-  "srv/GPTText.srv"
+  "srv/ChatLLMText.srv"
 )
 
 # uncomment the following section in order to fill in

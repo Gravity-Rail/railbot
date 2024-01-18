@@ -34,7 +34,7 @@ class BehaviorState(Enum):
 
 class MiniPupperRobot(Node):
     def __init__(self):
-        super().__init__("gpt_robot")
+        super().__init__("mini_pupper_robot")
         # Publisher
         self.pose_publisher = self.create_publisher(Pose, "/body_pose", 10)
         # Timer

@@ -9,7 +9,7 @@
 
   <depend>railbot_status</depend>
 
-  <exec_depend>gpt_interfaces</exec_depend>
+  <exec_depend>railbot_interfaces</exec_depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>

@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>gpt_audio</name>
-  <version>0.0.1</version>
-  <description>The audio management package for GPT applications, including audio input and output processing, processing loops, etc.</description>
+  <name>openai_audio</name>
+  <version>0.0.2</version>
+  <description>Read audio in fixed size chunks and transcribe using OpenAI STT, and do the same in reverse</description>
   <maintainer email="dan@gravityrail.com">Daniel Walmsley</maintainer>
   <license>Apache-2.0</license>
 

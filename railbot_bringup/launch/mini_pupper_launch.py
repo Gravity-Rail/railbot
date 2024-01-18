@@ -43,12 +43,12 @@ def generate_launch_description():
             Node(
                 package="railbot_main",
                 namespace="railbot",
-                executable="gpt_service",
-                name="gpt_service",
+                executable="chat_llm_service",
+                name="chat_llm_service",
                 output="screen",
             ),
             Node(
-                package="gpt_audio",
+                package="openai_audio",
                 namespace="railbot",
                 executable="audio_output",
                 name="audio_output",
@@ -58,14 +58,11 @@ def generate_launch_description():
                 ],
             ),
             Node(
-                package="gpt_audio",
+                package="openai_audio",
                 namespace="railbot",
                 executable="audio_input",
                 name="audio_input",
                 output="screen",
-                parameters=[
-                    {"real_hardware": LaunchConfiguration("real_hardware")}
-                ],
             ),
             Node(
                 package="gpt_robot",

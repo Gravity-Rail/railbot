@@ -22,9 +22,7 @@ setup(
     tests_require=["pytest"],
     entry_points={
         "console_scripts": [
-            "gpt_ros2_server = railbot_main.gpt_ros2_server_demo:main",
-            "gpt_ros2_client = railbot_main.gpt_ros2_client_demo:main",
-            "gpt_service = railbot_main.gpt_service:main",
+            "chat_llm_service = railbot_main.chat_llm_service:main",
         ],
     },
 )
