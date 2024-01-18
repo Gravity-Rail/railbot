@@ -196,6 +196,29 @@ And run node-red:
 node-red
 ```
 
+### Totally different approach: Vulcanexus
+
+Adapted for macOS from [these instructions](https://docs.vulcanexus.org/en/latest/rst/installation/docker.html).
+
+1. Install [XQuartz](https://www.xquartz.org/)
+2. Install [Docker Desktop](https://www.docker.com/products/docker-desktop)
+3. Open XQuartz and go to Preferences > Security and check the box for "Allow connections from network clients"
+4. Restart XQuartz
+
+Then in Terminal:
+
+```bash
+xhost local:root # might not be necessary with config change above? but is probably needed for Linux hosts
+docker run \
+    -it \
+    --privileged \
+    --net host \
+    --ipc host \
+    -e DISPLAY=$DISPLAY \
+    -v /tmp/.X11-unix:/tmp/.X11-unix \
+    eprosima/vulcanexus:iron-desktop
+```
+
 ### Using with FoxGlove
 
 TODO: can't make it work on macOS
