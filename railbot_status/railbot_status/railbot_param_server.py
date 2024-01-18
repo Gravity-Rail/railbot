@@ -34,7 +34,7 @@ class RailbotParamServer(Node):
         super().__init__("param_server", namespace="railbot")
         self.railbot_status_value = (
             RailbotStatus.WAITING_USER_INPUT.name
-        )  # Init status
+        )
         self.declare_parameter("railbot_status", self.railbot_status_value)
         self.create_timer(0.5, self.timer_callback)
         self.last_railbot_status_value = self.railbot_status_value
@@ -44,7 +44,7 @@ class RailbotParamServer(Node):
         if current_railbot_status_value != self.last_railbot_status_value:
             self.last_railbot_status_value = current_railbot_status_value
             self.get_logger().info(
-                'GPT status: "%s"' % current_railbot_status_value
+                'Railbot status: "%s"' % current_railbot_status_value
             )
 
 

@@ -1,2 +1,0 @@
-micromamba activate railbot
-rviz2

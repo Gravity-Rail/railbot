@@ -177,7 +177,7 @@ class MiniPupperRobot(Node):
             # Display
             self.display.show_state(BehaviorState.TROT)
         else:
-            self.get_logger().info("No GPT Status input.")
+            self.get_logger().info("No Railbot Status input.")
             # Display
             self.display.show_state(BehaviorState.SHUTDOWN)
 

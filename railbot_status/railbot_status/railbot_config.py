@@ -6,9 +6,8 @@ class RailbotConfig:
     def __init__(self):
         self.model = "gpt-4-1106-preview"
         self.api_key = os.getenv("OPENAI_API_KEY", None)
-        self.organization = "Automattic"
         self.temperature = 1
-        self.max_tokens = 256
+        self.max_tokens = 1024
         self.top_p = 1
         self.frequency_penalty = 0
         self.presence_penalty = 0

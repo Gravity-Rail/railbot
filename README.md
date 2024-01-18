@@ -33,7 +33,7 @@ My pain points specifically were:
 Then I discovered a few magical hacks:
 - [RoboStack](https://robostack.github.io/index.html) is an elegant bundling of ROS2 packages as a Conda repo for a variety of platforms. Honestly, if it weren't for the fact that I'm also trying to do LLM integration, this whole repo could be replaced with the words "Go use RoboStack".
 - [Micromamba](https://mamba.readthedocs.io/en/latest/user_guide/micromamba.html) is a lightweight cross-compiled Conda-compatible package manager that allows us to load RoboStack and related dependencies in the fastest and most compatible manner possible. Unlike full Mamba, it does not have system dependencies like Python.
-- The many examples provided by MangDang, including [ChatGPT integration](https://github.com/mangdangroboticsclub/chatgpt-minipupper2-ros2-humble) and underlying [ROS packages](https://github.com/mangdangroboticsclub/mini_pupper_ros). Without their working examples it would have been impossible for me to get this far. Open Source is awesome!
+- The many examples provided by MangDang and others in the robotics community, including [ChatGPT integration](https://github.com/mangdangroboticsclub/chatgpt-minipupper2-ros2-humble) and underlying [ROS packages](https://github.com/mangdangroboticsclub/mini_pupper_ros). Without their working examples it would have been impossible for me to get this far. Open Source is awesome!
 
 Once I started to make progress on these, for example being able to run the same code on my Mac, x86 Linux machine and Raspberry Pi, I realized that this was something that could be useful to others as well.
 
@@ -275,32 +275,6 @@ build	install	log	src
 
 > [!TIP] Every time you rebuild using `colcon build`, be sure to re-run `. ./install/local_setup.zsh`, otherwise you may get missing package errors when trying to launch a package.
 
-### Running a simple text chat example
-
-Now we can source our generated "overlay":
-
-```bash
-source ./install/local_setup.sh
-```
-
-And now we can run it:
-
-```bash
-% pip install openai
-% OPENAI_API_KEY="sk-..." ros2 run railbot_main gpt_ros2_server
-[INFO] [1702827350.339493666] [gpt_ros2_server]: GPT Server is ready.
-```
-
-And the client:
-
-```bash
-% ros2 run railbot_main gpt_ros2_client
-[INFO] [1702828717.243596012] [gpt_ros2_client]: GPT Client is ready.
-You: What is your name?
-
-Mini Pupper: My name is Mini Pupper. Woof!
-```
-
 ### Running an audio chat example
 
 ```bash
@@ -310,40 +284,9 @@ OPENAI_API_KEY="sk-..." ros2 launch railbot_bringup mini_pupper_launch.py
 
 Now when you see `Starting audio recording...` try saying a few words. After capturing a few seconds of audio, it sends it to OpenAI to be converted into text. Then, it sends the Text to the Chat Completions endpoint to compute a response. Finally, it converts the response text back into speech using _another_ API. No wonder it takes so long to reply!
 
-Here's some example output:
-
-```
-[audio_output-3] [INFO] [1702829135.556824870] [gpt.audio_output]: Text to speech node successfully initialized.
-[gpt_service-2] [INFO] [1702829135.556989663] [gpt.gpt_service]: GPT node is ready.
-[audio_output-3] [INFO] [1702829135.557156831] [gpt.audio_output]: Waiting for text to speech input...
-[audio_input-4] [INFO] [1702829135.741494108] [gpt.audio_input]: Audio input successfully initialized.
-[audio_input-4] [INFO] [1702829137.701167975] [gpt.audio_input]: Starting audio recording...
-[audio_input-4] [INFO] [1702829144.885283700] [gpt.audio_input]: Audio recording complete!
-[audio_input-4] Set parameter successful
-[railbot_param_server-1] [INFO] [1702829145.691914830] [gpt.railbot_param_server]: GPT status: "STT_PROCESSING"
-[audio_input-4] [INFO] [1702829150.759706228] [gpt.audio_input]: Audio Input Node publishing:
-[audio_input-4] 'This is a test.'
-[gpt_service-2] [INFO] [1702829150.760200314] [gpt.gpt_service]: GPT node has received: This is a test.
-[gpt_service-2] Set parameter successful
-[railbot_param_server-1] [INFO] [1702829151.670866539] [gpt.railbot_param_server]: GPT status: "CHAT_LLM_PROCESSING"
-[gpt_service-2] [INFO] [1702829151.776636563] [gpt.gpt_service]: GPT node is processing: This is a test.
-[gpt_service-2] [INFO] [1702829151.777072858] [gpt.gpt_service]: user_input_processor has finished.
-[gpt_service-2] [INFO] [1702829152.709136356] [gpt.gpt_service]: generate_chat_completion has finished.
-[gpt_service-2] [INFO] [1702829152.709641359] [gpt.gpt_service]: get_chat_response_text has finished.
-[gpt_service-2] [INFO] [1702829152.710320656] [gpt.gpt_service]: GPT service node has published: std_msgs.msg.String(data='Woof! Hello, how can Mini Pupper help you today?')
-[audio_output-3] [INFO] [1702829152.712106585] [gpt.audio_output]: Received text: 'Woof! Hello, how can Mini Pupper help you today?'
-[audio_output-3] Set parameter successful
-[railbot_param_server-1] [INFO] [1702829153.667098451] [gpt.railbot_param_server]: GPT status: "TTS_PROCESSING"
-[audio_output-3] Set parameter successful
-[railbot_param_server-1] [INFO] [1702829156.168938990] [gpt.railbot_param_server]: GPT status: "ROBOT_ACTION"
-[audio_output-3] [ffmpeg/demuxer] mp3: Estimating duration from bitrate, this may be inaccurate
-[audio_output-3]  (+) Audio --aid=1 (mp3 1ch 24000Hz)
-[audio_output-3] AO: [coreaudio] 24000Hz mono 1ch floatp
-[audio_output-3] A: -00:00:00 / 00:00:02 (0%)
-[audio_output-3] A: 00:00:00 / 00:00:02 (1%)
-```
-
 ### Running a Whisper example
+
+> [!TIP] Not working yet.
 
 This actually downloads and uses https://github.com/ros-ai/ros2_whisper from inside our workspace. I haven't integrated this yet.
 
@@ -382,95 +325,6 @@ node_ptr_->declare_parameter("model_name", "medium.en"); // was base.en
 
 Or maybe (TBD) the choices in whisper_server_mixin.py
 
-# STOP HERE
-
-The docs below this point need to be updated for the micromamba/conda-ish approach described above, which works on a mac but might need tweaking for Linux and certainly Windows.
-
-## Simulated Mode
-
-To install standalone on a PC you'll need WSL 2 with Ubuntu 20.04 LTS, or actual Ubuntu.
-
-```bash
-# make a wordspace directory for building our ROS2 package
-cd ~
-mkdir -p railbot_ros2_ws/src
-cd railbot_ros2_ws/src
-
-# check out the code
-git clone git@github.com:Gravity-Rail/railbot
-cd railbot
-. ./setup.sh
-
-# install ROS dependencies - TODO not necessary on MacOS? Or at all?
-cd ~/railbot_ros2_ws
-rosdep install --from-paths src --ignore-src -r -y
-
-# build the package
-source /opt/ros/humble/setup.bash
-# TODO: check if virtualenv breaks things on the Pi
-colcon build --symlink-install --cmake-args -DPython3_FIND_VIRTUALENV=ONLY
-```
-
-Modify your ~/.bashrc to include the following lines:
-
-```bash
-. $HOME/railbot_ros2_ws/install/setup.bash
-export OPENAI_API_KEY="..."
-```
-
-## One-click Installation
-
-Mini Pupper 2 and Ubuntu 22.04 + ROS 2 Humble is required. Please follow the installation document [here](https://github.com/mangdangroboticsclub/mini_pupper_ros )
-
-To install with one command, connect to your Mini Pupper 2, be certain to tell ssh to allow X11 forwarding if you want to run demo 1.
-
-```bash
-ssh -o ForwardX11=yes ubuntu@<Your Mini Pupper 2 IP address>
-```
-
-and then run the following command:
-
-```bash
-wget -O $HOME/install.sh https://raw.githubusercontent.com/Gravity-Rail/railbot/main/install.sh && sudo chmod +x $HOME/install.sh && bash $HOME/install.sh && rm $HOME/install.sh
-```
-
-After the one-click Installation, `demo 1 Simple robot GPT call on the PC side` will run automatically, if you want to run other demos, please modify the configuration file according to Step4 of Manual Installation
-
-![Mini Pupper 2](imgs/MiniPupper.GPT.PCDemo.png)
-
-
-## Manual Installation
-
-If you want to install manually, follow the steps below.
-
-### Step 1: Clone the repo
-
-```bash
-cd <your_ws>/src
-git clone https://github.com/Gravity-Rail/railbot.git
-```
-
-### Step 3: Build the repo
-
-```bash
-cd <your_ws>
-rosdep install --from-paths src --ignore-src -r -y
-colcon build --symlink-install
-```
-
-### Step 4: Configuration
-
-To use the gpt4_ros2 package, follow these steps:
-
-#### 4.2 Set up OpenAI API
-1. Create an account on [OpenAI](https://platform.openai.com).
-2. Click on the user icon in the upper-right corner.
-3. Click `View API keys`.
-4. Click `Create new secret key`.
-5. Enter a `name` and click `Create secret key`.
-6. Copy your secret key and save it securely.
-
-
 # Usage
 
 ## Demo: OpenAI-based interaction on Mini Pupper 2
@@ -485,6 +339,7 @@ ros2 launch railbot_bringup bringup.launch.py
 
 ```bash
 # Terminal 2 Bringup RailBot layer
+export OPENAI_API_KEY="sk-..."
 ros2 launch railbot_bringup mini_pupper_launch.py
 ```
 
