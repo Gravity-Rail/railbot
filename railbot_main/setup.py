@@ -13,7 +13,7 @@ setup(
         ),
         ("share/" + package_name, ["package.xml"]),
     ],
-    install_requires=["setuptools", "railbot_status"],
+    install_requires=["railbot_status"],
     zip_safe=True,
     maintainer="Daniel Walmsley",
     maintainer_email="dan@gravityrail.com",

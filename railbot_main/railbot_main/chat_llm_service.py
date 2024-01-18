@@ -21,9 +21,11 @@ from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain_openai import ChatOpenAI
 
 config = RailbotConfig()
+chat_history = [] # TODO: sqlite
+
 # openai.organization = config.organization
 
-# client = OpenAI(api_key=config.api_key)
+client = OpenAI(api_key=config.api_key)
 
 # TODO:
 # * generalize to any Chat model supported by Langchain
@@ -35,21 +37,25 @@ class ChatLLMService(Node):
             String, "chat_llm_text_input", self.llm_callback, 10
         )
         self.publisher = self.create_publisher(String, "chat_llm_text_output", 10)
+
+        # initialize history with the system prompt
+        self.append_message_to_history("system", config.system_prompt)
+
         self.status_operation = RailbotStatusOperation()
 
     def llm_callback(self, msg):
         self.get_logger().info("ChatLLM node received: %s" % msg.data)
         self.status_operation.set_railbot_status_value(RailbotStatus.CHAT_LLM_PROCESSING.name)
 
-        prompt = ChatPromptTemplate.from_messages(
-            [
-                ("system", config.system_prompt),
-                MessagesPlaceholder(variable_name="history"),
-                ("human", "{question}"),
-            ]
-        )
+        # prompt = ChatPromptTemplate.from_messages(
+        #     [
+        #         ("system", config.system_prompt),
+        #         MessagesPlaceholder(variable_name="history"),
+        #         ("human", "{question}"),
+        #     ]
+        # )
 
-        chain = prompt | ChatOpenAI()
+        # chain = prompt | ChatOpenAI()
 
 
         input = self.user_input_processor(msg.data)
@@ -59,11 +65,11 @@ class ChatLLMService(Node):
         self.append_message_to_history("user", config.user_prompt)
         self.append_message_to_history("assistant", config.assistant_response)
 
-        # Publish the response to the /chat_llm_text_output topic
+        # Publish the response
         response_msg = String(data=output)
         self.publisher.publish(response_msg)
         self.get_logger().info(
-            "GPT service node has published: %s" % response_msg
+            "Chat LLM service node has published: %s" % response_msg
         )
 
     def user_input_processor(self, user_prompt):
@@ -72,7 +78,7 @@ class ChatLLMService(Node):
         and preprocesses it to be used as input
         """
         input = []
-        for message in config.chat_history:
+        for message in chat_history:
             input.append(
                 {"role": message["role"], "content": message["content"]}
             )
@@ -110,7 +116,7 @@ class ChatLLMService(Node):
         return response_text
 
     def append_message_to_history(self, user_or_ai, content):
-        config.chat_history.append({"role": user_or_ai, "content": content})
+        chat_history.append({"role": user_or_ai, "content": content})
 
 
 def main(args=None):

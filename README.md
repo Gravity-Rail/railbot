@@ -27,6 +27,7 @@ My pain points specifically were:
 - Missing ROS2 packages in Ubuntu for AArch64 (ARM64) architecture hindered Docker development on MacOS, and x86 in emulation was too slow and hard to configure
 - Migrated to x86 laptop out of frustration. Using Ubuntu in WSL2 (Windows) resulted in persistent USB issues, so...
 - Then I had to install a specific version of Ubuntu on a specific laptop just to be able to develop packages for my robot running on a Raspberry Pi, and configure the GRUB bootloader etc.
+- Magical parameters everywhere like `run_on_real_hardware` that you just "need to know" in order for things to work. The framework should have sensible defaults on each platform (e.g. robustly detecting "real hardware") and shouldn't expect clairvoyance from the end user.
 - There has to be a better way!
 
 Then I discovered a few magical hacks:
@@ -272,6 +273,8 @@ Now running `ls` in the current dir should show some additional directories alon
 build	install	log	src
 ```
 
+> [!TIP] Every time you rebuild using `colcon build`, be sure to re-run `. ./install/local_setup.zsh`, otherwise you may get missing package errors when trying to launch a package.
+
 ### Running a simple text chat example
 
 Now we can source our generated "overlay":
@@ -302,7 +305,7 @@ Mini Pupper: My name is Mini Pupper. Woof!
 
 ```bash
 source ./install/local_setup.sh
-OPENAI_API_KEY="sk-..." ros2 launch railbot_bringup mini_pupper_launch.py real_hardware:=False
+OPENAI_API_KEY="sk-..." ros2 launch railbot_bringup mini_pupper_launch.py
 ```
 
 Now when you see `Starting audio recording...` try saying a few words. After capturing a few seconds of audio, it sends it to OpenAI to be converted into text. Then, it sends the Text to the Chat Completions endpoint to compute a response. Finally, it converts the response text back into speech using _another_ API. No wonder it takes so long to reply!
@@ -481,8 +484,8 @@ ros2 launch railbot_bringup bringup.launch.py
 ```
 
 ```bash
-# Terminal 2 Bringup RailBot
-ros2 launch railbot_bringup mini_pupper_launch.py real_hardware:=True
+# Terminal 2 Bringup RailBot layer
+ros2 launch railbot_bringup mini_pupper_launch.py
 ```
 
 Huge thanks to MangDang Robotics Club for the [high quality examples for the Mini Pupper 2](https://github.com/mangdangroboticsclub/chatgpt-minipupper2-ros2-humble) which made all this possible. Go buy their robots!

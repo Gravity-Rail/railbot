@@ -1,6 +1,6 @@
 from setuptools import setup
 
-package_name = "gpt_robot"
+package_name = "mini_pupper_robot"
 
 setup(
     name=package_name,
@@ -13,16 +13,16 @@ setup(
         ),
         ("share/" + package_name, ["package.xml"]),
     ],
-    install_requires=["setuptools", "railbot_status"],
+    install_requires=["railbot_status"],
     zip_safe=True,
     maintainer="Daniel Walmsley",
     maintainer_email="dan@gravityrail.com",
-    description="Mini Pupper integration for Railbot",
+    description="Mini Pupper 2 integration for Railbot",
     license="Apache-2.0",
     tests_require=["pytest"],
     entry_points={
         "console_scripts": [
-            "gpt_robot = gpt_robot.gpt_robot:main",
+            "mini_pupper_robot = mini_pupper_robot.mini_pupper_robot:main",
         ],
     },
 )

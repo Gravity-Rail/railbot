@@ -13,7 +13,6 @@ setup(
         ),
         ("share/" + package_name, ["package.xml"]),
     ],
-    install_requires=["setuptools"],
     zip_safe=True,
     maintainer="Daniel Walmsley",
     maintainer_email="dan@gravityrail.com",

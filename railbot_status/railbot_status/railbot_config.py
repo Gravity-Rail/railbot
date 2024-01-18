@@ -4,9 +4,7 @@ import os
 
 class RailbotConfig:
     def __init__(self):
-        # GPT related
-        self.model = "gpt-3.5-turbo"
-        # self.model = "gpt-4"
+        self.model = "gpt-4-1106-preview"
         self.api_key = os.getenv("OPENAI_API_KEY", None)
         self.organization = "Automattic"
         self.temperature = 1

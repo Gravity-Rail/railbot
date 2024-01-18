@@ -14,6 +14,7 @@ from railbot_status.railbot_config import RailbotConfig
 
 import os
 import tempfile
+from shutil import which
 
 
 config = RailbotConfig()
@@ -30,11 +31,11 @@ class AudioInput(Node):
 
         self.volume_gain_multiplier = config.volume_gain_multiplier
         # check if the amixer command is available
-        if os.system("which amixer") != 0:
+        if which("amixer") is not None:
             os.system("amixer -c 0 sset 'Headphone' 100%")
 
         self.railbot_operation = RailbotStatusOperation()
-        self.get_logger().info("Initialized OpenAI Audio Transcription")
+        self.get_logger().info("Initialized OpenAI STT")
 
     def run_audio_input_callback(self):
         gpt_current_status_value = self.railbot_operation.get_railbot_status_value()
@@ -65,7 +66,6 @@ class AudioInput(Node):
                 audio.export(temp_mp3.name, format='mp3')
 
                 with open(temp_mp3.name, "rb") as f:
-                    # audio_bytes = f.read()
                     transcript = client.audio.transcriptions.create(
                         model="whisper-1",
                         file=f
