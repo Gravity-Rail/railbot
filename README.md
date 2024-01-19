@@ -91,13 +91,12 @@ Everything from here down is totally a work in progress.
 > On macOS with homebrew, you can get `micromamba` by running `brew install micromamba`. This may be preferable to the default, which is executing `micro.mamba.pm/install.sh` directly.
 
 The `setup.sh` script does the following:
- * installs `micromamba` if necessary. This tool is used to create isolated environments and install packages.
- * creates the `railbot` micromamba environment with desired package channels and versions (ROS 2 Humble, nodejs, cmake, colcon, rosdep, etc)
-  * `micromamba create -n railbot -c conda-forge -c robostack-staging -c robostack-experimental ros-humble-desktop rosdep nodejs==18.9.1 compilers cmake pkg-config make ninja colcon-common-extensions`
- * activates the `railbot` environment
-  * `micromamba activate railbot`
- * installs packages specified in `requirements.txt`
-  * `pip install -r requirements.txt`
+1. Installs `micromamba` if necessary. This tool is used to create isolated environments and install packages.
+2. Creates the `railbot` micromamba environment with desired package channels and versions (ROS 2 Humble, nodejs, cmake, colcon, rosdep, etc)
+3. Activates the `railbot` micromamba environment
+4. Installs packages specified in `requirements.txt`
+
+You can run it like this:
 
 ```bash
 . ./setup.sh
