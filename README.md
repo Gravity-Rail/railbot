@@ -4,9 +4,9 @@
 
 # Overview
 
-The purpose of Railbot is to experiment with LLM integrations for real robots.
+The purpose of Railbot is to allow hackers and tinkerers to build interactive robots using the latest LLM techniques. It is in "initial commit" state with very few features beyond a simple proof-of-concept, but if you're excited to help out then we welcome patches :smiley:
 
-Hopefully by following this guide you will be able to:
+After following the steps in this README you will be able to:
 
 - Install the necessary packages to make fun interactive robots ([ROS 2](https://docs.ros.org/en/humble/index.html) and [LangChain](https://github.com/langchain-ai/langchain), MacOS and Linux supported, Windows coming soon)
 - Build "workspace" which is where you customize and configure your specific robot
