@@ -102,7 +102,8 @@ You can run it like this:
 . ./setup.sh
 ```
 
-> [!TIP] Also, might be useful, from the [ROS 2 MacOS docs](https://docs.ros.org/en/iron/Installation/Alternatives/macOS-Development-Setup.html#disable-system-integrity-protection-sip) (TODO: Confirm this is necessary):
+> [!TIP]
+> Also, might be useful, from the [ROS 2 MacOS docs](https://docs.ros.org/en/iron/Installation/Alternatives/macOS-Development-Setup.html#disable-system-integrity-protection-sip) (TODO: Confirm this is necessary):
 
 Confirm that your environment is working by running rvis2:
 
@@ -258,7 +259,8 @@ Now running `ls` in the current dir should show some additional directories alon
 build	install	log	src
 ```
 
-> [!TIP] Every time you rebuild using `colcon build`, be sure to re-run `. ./install/local_setup.zsh`, otherwise you may get missing package errors when trying to launch a package.
+> [!TIP]
+> Every time you rebuild using `colcon build`, be sure to re-run `. ./install/local_setup.zsh`, otherwise you may get missing package errors when trying to launch a package.
 
 ### Running an audio chat example
 
