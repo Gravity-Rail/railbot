@@ -8,8 +8,8 @@ The purpose of Railbot is to experiment with LLM integrations for real robots.
 
 Hopefully by following this guide you will be able to:
 
-- Install the necessary packages for ROS2 development with Langchain (MacOS and Linux supported, Windows coming soon)
-- Build a ROS2 "workspace", which is where you customize and configure your robot
+- Install the necessary packages to make fun interactive robots ([ROS 2](https://docs.ros.org/en/humble/index.html) and [LangChain](https://github.com/langchain-ai/langchain), MacOS and Linux supported, Windows coming soon)
+- Build "workspace" which is where you customize and configure your specific robot
 - Run a simple example with voice interaction and a simulated robot environment
 - If you have a Mini Pupper 2, then you can deploy this to a real robot. Other robots coming soon!
 
@@ -19,7 +19,7 @@ Initial feature goals:
 - Built as a set of [ROS 2](https://docs.ros.org/en/humble/index.html) packages, enabling the code to run on real robots or in simulation.
 - Lightweight and developer friendly, utilizing the cross-platform [micromamba](https://mamba.readthedocs.io/en/latest/user_guide/micromamba.html) tool to ensure a consistent environment across Linux, MacOS and eventually Windows.
 
-Ideally anyone who can write basic python code on laptop on in a web-based notebook should now be able to develop ROS2 code that can run on real robot hardware, or run in simulation locally within minimal overhead.
+Ideally anyone who can write basic python code on laptop on in a web-based notebook should now be able to develop ROS2 code that can run on real robot hardware or run in simulation locally.
 
 ## Why?
 
