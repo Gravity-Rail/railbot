@@ -1,9 +1,7 @@
 <h1 align="center">RailBot</h1>
 
 <p align="center">
-    <a href="https://discord.gg/S8MRa2gK">
-      <img alt="Discord" src="https://img.shields.io/discord/1186108372097962164?logo=discord&logoColor=white&style=flat"/>
-    </a>
+    <a href="https://discord.gg/S8MRa2gK"><img alt="Discord" src="https://img.shields.io/discord/1186108372097962164?logo=discord&logoColor=white&style=flat"/></a>
     <img src="https://img.shields.io/static/v1?label=license&message=Apache&color=white&style=flat" alt="License"/>
     <br>
     <br>
@@ -11,8 +9,6 @@
 </p>
 
 <br>
-
-![DALL·E 2024-01-18 14 36 31 - A cartoon image of a cheerful robot with a metallic body and big, expressive eyes, riding a colorful rollercoaster  The rollercoaster is set in a vibr](https://github.com/Gravity-Rail/railbot/assets/51896/8171ae05-9873-4968-b2e0-9be5fd6dc293 | width=600)
 
 # Overview
 
