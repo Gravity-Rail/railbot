@@ -17,7 +17,7 @@ fi
 if [ ! -d "$HOME/.micromamba/envs/railbot" ]; then
 	echo "** Creating railbot micromamba environment (up to 15 minutes)"
 	micromamba create -n railbot -c conda-forge -c robostack-staging -c robostack-experimental \
-		ros-humble-desktop rosdep nodejs==18.9.1 compilers cmake pkg-config make ninja colcon-common-extensions
+		ros-humble-desktop rosdep mpv portaudio ffmpeg nodejs==18.9.1 compilers cmake pkg-config make ninja colcon-common-extensions
 fi
 
 # if apt is available, use apt install to install linux dependencies
@@ -27,7 +27,7 @@ if type apt &> /dev/null; then
 	sudo apt upgrade -y
 	sudo apt install gnome-terminal libcanberra-gtk-module \
 		libcanberra-gtk3-module \
-		portaudio19-dev ffmpeg libportaudio2 alsa-utils mpv -y
+		alsa-utils -y
 fi
 
 # pip install -r requirements.txt
