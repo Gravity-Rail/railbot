@@ -10,6 +10,29 @@
 
 <br>
 
+# Quickstart
+
+I'm hoping that this will work on most platforms:
+
+```bash
+# clone the repo
+git clone https://github.com/Gravity-Rail/railbot.git
+cd railbot
+. ./setup.sh
+
+# link into a "ROS workspace"
+mkdir ~/railbot_ws
+source ./install/local_setup.sh
+OPENAI_API_KEY="sk-..." ros2 launch railbot_bringup mini_pupper_launch.py
+```
+
+From here, you can run standard robotics commands like `rvis2` and `rqt_graph`, and also demos like this:
+
+```bash
+source ./install/local_setup.sh
+OPENAI_API_KEY="sk-..." ros2 launch railbot_bringup mini_pupper_launch.py
+```
+
 # Overview
 
 The purpose of Railbot is to allow hackers and tinkerers to build interactive robots using the latest LLM techniques. It is in "initial commit" state with very few features beyond a simple proof-of-concept, but if you're excited to help out then we welcome patches :smiley:

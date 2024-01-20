@@ -1,0 +1,5 @@
+ipywidgets==7.8.1
+ipycanvas
+jupyter
+jupyterlab==3.6
+jupyros @ git+https://github.com/RoboStack/jupyter-ros.git

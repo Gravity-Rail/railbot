@@ -30,10 +30,19 @@ fi
 
 # pip install -r requirements.txt
 
-echo "** Activating railbot venv environment"
+echo "** Activating railbot micromamba environment"
 micromamba activate railbot
 
 echo "** Installing pip dependencies"
 pip install -r requirements.txt
+
+# ask the user if they want to install development dependencies
+read -p "Do you want to install development dependencies? (y/n) " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+	echo "** Installing development dependencies"
+	pip install -r requirements-dev.txt
+fi
 
 echo "** Shell Ready"
