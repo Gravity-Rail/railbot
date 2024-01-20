@@ -15,13 +15,19 @@
 I'm hoping that this will work on most platforms:
 
 ```bash
-# clone the repo
+# this should be wherever your code lives on your workstation...
+cd ~/
+# clone the repo and set up dependencies
 git clone https://github.com/Gravity-Rail/railbot.git
 cd railbot
 . ./setup.sh
 
 # link into a "ROS workspace"
-mkdir ~/railbot_ws
+mkdir -p ~/railbot_ws/src && cd ~/railbot_ws/src
+ln -s ~/railbot .
+cd ../
+colcon build --symlink-install --cmake-args -DPython3_FIND_VIRTUALENV=ONLY
+
 source ./install/local_setup.sh
 OPENAI_API_KEY="sk-..." ros2 launch railbot_bringup mini_pupper_launch.py
 ```
@@ -222,10 +228,10 @@ Now you'll want to create your own workspace directory.
 ```bash
 # change this to whatever you want, but don't forget to have it set in your
 # shell when running any of these commands again.
-RAILBOT_SOURCE=~/path/to/this-source-directory
+RAILBOT_SOURCE=~/railbot
 
 # this is your workspace directory, change to whatever you want
-RAILBOT_WS=~/workspace/robotics/railbot_ws
+RAILBOT_WS=~/railbot_ws
 
 # let's make our workspace dir
 mkdir -p $RAILBOT_WS/src
