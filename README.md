@@ -29,13 +29,11 @@ cd ../
 colcon build --symlink-install --cmake-args -DPython3_FIND_VIRTUALENV=ONLY
 
 source ./install/local_setup.sh
-OPENAI_API_KEY="sk-..." ros2 launch railbot_bringup mini_pupper_launch.py
 ```
 
 From here, you can run standard robotics commands like `rvis2` and `rqt_graph`, and also demos like this:
 
 ```bash
-source ./install/local_setup.sh
 OPENAI_API_KEY="sk-..." ros2 launch railbot_bringup mini_pupper_launch.py
 ```
 

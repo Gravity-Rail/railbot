@@ -30,8 +30,6 @@ if type apt &> /dev/null; then
 		ffmpeg mpv alsa-utils -y
 fi
 
-# pip install -r requirements.txt
-
 echo "** Activating railbot micromamba environment"
 micromamba activate railbot
 
