@@ -1,6 +1,18 @@
-# RailBot: An easy way to get started with robotics and multimodal LLMs
+<h1 align="center">RailBot</h1>
 
-![DALL·E 2024-01-18 14 36 31 - A cartoon image of a cheerful robot with a metallic body and big, expressive eyes, riding a colorful rollercoaster  The rollercoaster is set in a vibr](https://github.com/Gravity-Rail/railbot/assets/51896/8171ae05-9873-4968-b2e0-9be5fd6dc293)
+<p align="center">
+    <a href="https://discord.gg/S8MRa2gK">
+      <img alt="Discord" src="https://img.shields.io/discord/1186108372097962164?logo=discord&logoColor=white&style=flat"/>
+    </a>
+    <img src="https://img.shields.io/static/v1?label=license&message=Apache&color=white&style=flat" alt="License"/>
+    <br>
+    <br>
+    <strong>An easy way to get started with robotics and multimodal LLMs.</strong>
+</p>
+
+<br>
+
+![DALL·E 2024-01-18 14 36 31 - A cartoon image of a cheerful robot with a metallic body and big, expressive eyes, riding a colorful rollercoaster  The rollercoaster is set in a vibr](https://github.com/Gravity-Rail/railbot/assets/51896/8171ae05-9873-4968-b2e0-9be5fd6dc293 | width=600)
 
 # Overview
 
@@ -23,7 +35,7 @@ Ideally anyone who can write basic python code on laptop on in a web-based noteb
 
 ## Why?
 
-This project grew out of my own desire to write general-purpose code that could bring LLM-powered agent abilities, including those multi-modal chat LLMs, to low-cost enthusiast robotics hardware. I am starting with the [Mini Pupper 2](https://mangdang.store/products/mini-pupper-2-ai-robot-smart-robot-quadruped-robot-educational-robot-genuine-open-source-stem-k12) because that's what I have (and I recommend it! Great kit) but I hope to expand to other platforms soon.
+This project grew out of my own desire to write general-purpose code that could bring LLM-powered agent abilities, including multi-modal chat LLMs, to low-cost enthusiast robotics hardware. I am starting with the [Mini Pupper 2](https://mangdang.store/products/mini-pupper-2-ai-robot-smart-robot-quadruped-robot-educational-robot-genuine-open-source-stem-k12) because that's what I have (and I recommend it! Great kit) but I hope to expand to other platforms soon.
 
 My pain points specifically were:
 - Missing ROS2 packages in Ubuntu for AArch64 (ARM64) architecture hindered Docker development on MacOS, and x86 in emulation was too slow and hard to configure
