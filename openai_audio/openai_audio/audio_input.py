@@ -32,6 +32,10 @@ class AudioInput(Node):
         self.volume_gain_multiplier = config.volume_gain_multiplier
         # check if the amixer command is available
         if which("amixer") is not None:
+            # works on a Pi4 running Raspbian
+            os.system("amixer sset 'Capture' 100%")
+
+            # works on CM4 in Mini Pupper 2
             os.system("amixer -c 0 sset 'Headphone' 100%")
 
         self.railbot_operation = RailbotStatusOperation()

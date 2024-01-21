@@ -28,7 +28,7 @@ ln -s ~/railbot .
 cd ../
 colcon build --symlink-install --cmake-args -DPython3_FIND_VIRTUALENV=ONLY
 
-source ./install/local_setup.sh
+source ./install/local_setup.bash
 ```
 
 From here, you can run standard robotics commands like `rvis2` and `rqt_graph`, and also demos like this:

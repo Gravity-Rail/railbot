@@ -68,7 +68,7 @@ class MiniPupperRobot(Node):
         self.get_logger().info("Railbot Mini Pupper node started successfully.")
 
     def nod_head(self):
-        self.get_logger().info("Nodding head...")
+        self.get_logger().info("Nodding head")
         interval = 0.02  # seconds
         duration = 0.25  # seconds
         num_values = int(duration / interval)
