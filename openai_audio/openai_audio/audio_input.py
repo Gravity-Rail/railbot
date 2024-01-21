@@ -30,6 +30,7 @@ class AudioInput(Node):
         self.create_timer(1, self.run_audio_input_callback)
 
         self.volume_gain_multiplier = config.volume_gain_multiplier
+
         # check if the amixer command is available
         if which("amixer") is not None:
             # works on a Pi4 running Raspbian
@@ -45,9 +46,11 @@ class AudioInput(Node):
         gpt_current_status_value = self.railbot_operation.get_railbot_status_value()
         if gpt_current_status_value == RailbotStatus.WAITING_USER_INPUT.name:
             self.run_audio_input()
+        else:
+            self.get_logger().info("GPT status is %s" % gpt_current_status_value)
 
     def run_audio_input(self):
-        self.get_logger().info("Recording Audio...")
+        self.get_logger().info("Recording Audio")
         audio_data = sd.rec( int(config.duration * config.sample_rate), samplerate=config.sample_rate, channels=1 )
         sd.wait()  # Wait until recording is finished
 
