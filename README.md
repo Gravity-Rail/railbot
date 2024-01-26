@@ -39,7 +39,7 @@ OPENAI_API_KEY="sk-..." ros2 launch railbot_bringup mini_pupper_launch.py
 
 # Overview
 
-The purpose of Railbot is to allow hackers and tinkerers to build interactive robots using the latest LLM techniques. It is in "initial commit" state with very few features beyond a simple proof-of-concept, but if you're excited to help out then we welcome patches :smiley:
+The purpose of Railbot is to allow hackers and tinkerers to build interactive robots using the latest LLM techniques. It is in "initial commit" state with very few features beyond a simple proof-of-concept, but if you're excited to help out then we welcome patches :smiley: (you can start by joining our [Discord Community](https://discord.gg/S8MRa2gK))
 
 After following the steps in this README you will be able to:
 
