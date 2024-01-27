@@ -59,12 +59,27 @@ colcon build --symlink-install --cmake-args -DPython3_FIND_VIRTUALENV=ONLY
 ```
 
 Run:
+
 ```bash
 ros2 run railbot_cam img_publisher
+[INFO] [1705879269.659601359] [railbot.image_publisher]: Publishing video frame
+[INFO] [1705879269.766780863] [railbot.image_publisher]: Publishing video frame
+[INFO] [1705879269.860619622] [railbot.image_publisher]: Publishing video frame
+[INFO] [1705879269.966986210] [railbot.image_publisher]: Publishing video frame
 ```
 
 And:
 
 ```bash
 ros2 run railbot_cam img_subscriber
+[INFO] [1705879268.972452766] [railbot.image_subscriber]: Receiving video frame
+[INFO] [1705879269.001118214] [railbot.image_subscriber]: Receiving video frame
+[INFO] [1705879269.074362897] [railbot.image_subscriber]: Receiving video frame
+[INFO] [1705879269.270554120] [railbot.image_subscriber]: Receiving video frame
+[INFO] [1705879269.297025777] [railbot.image_subscriber]: Receiving video frame
 ```
+
+By selecting the ros2 display window you should see the video frames being shown.
+
+Now let's publish selected video frames using ChatGPT with Images.
+
