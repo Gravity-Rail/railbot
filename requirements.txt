@@ -17,3 +17,5 @@ sidecar
 roslibpy
 langchain
 langchain-openai
+pylint
+opencv-contrib-python

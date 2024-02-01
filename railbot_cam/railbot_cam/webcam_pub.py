@@ -49,7 +49,7 @@ class ImagePublisher(Node):
     Class constructor to set up the node
     """
     # Initiate the Node class's constructor and give it a name
-    super().__init__('image_publisher')
+    super().__init__('image_publisher', namespace="railbot")
 
     # Create the publisher. This publisher will publish an Image
     # to the video_frames topic. The queue size is 10 messages.
