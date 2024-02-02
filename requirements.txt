@@ -19,3 +19,6 @@ langchain
 langchain-openai
 pylint
 opencv-contrib-python
+face_recognition
+docarray
+annlite

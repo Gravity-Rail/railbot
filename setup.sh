@@ -17,7 +17,7 @@ fi
 if [ ! -d "$HOME/.micromamba/envs/railbot" ]; then
 	echo "** Creating railbot micromamba environment (up to 15 minutes)"
 	micromamba create -n railbot -c conda-forge -c robostack-staging -c robostack-experimental \
-		ros-humble-desktop rosdep portaudio nodejs==18.9.1 compilers cmake pkg-config make ninja colcon-common-extensions
+		ros-humble-desktop rosdep dlib portaudio nodejs==18.9.1 compilers cmake pkg-config make ninja colcon-common-extensions
 fi
 
 # if apt is available, use apt install to install linux dependencies

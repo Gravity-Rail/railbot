@@ -26,3 +26,9 @@ ros2 run railbot_cam img_subscriber
 [INFO] [1705879269.270554120] [railbot.image_subscriber]: Receiving video frame
 [INFO] [1705879269.297025777] [railbot.image_subscriber]: Receiving video frame
 ```
+
+## Face detection with OpenCV and recognition with dlib
+
+```bash
+ros2 run railbot_cam img_identifier
+```
