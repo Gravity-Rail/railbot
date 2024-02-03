@@ -19,3 +19,22 @@ set(msg_files
 ```
 
 Now `cd $RAILBOT_WS` and run `colcon build --symlink-install --cmake-args -DPython3_FIND_VIRTUALENV=ONLY` to build the message type.
+
+Now in Python code you should be able to import the message type like this:
+
+```python
+from railbot_interfaces.msg import Person
+
+class MyNode(Node):
+	# ...
+	# to publish
+	self.publisher = self.create_publisher(Person, 'people', 10)
+	self.publisher.publish(Person(name=m.tags["name"], id=m.id))
+
+	# to subscribe
+	self.subscription = self.create_subscription(
+		Person,
+		'people',
+		self.listener_callback,
+		10)
+```
