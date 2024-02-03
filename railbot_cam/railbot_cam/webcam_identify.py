@@ -126,8 +126,6 @@ class ImageIdentifier(Node):
       new_docs_to_index = []
       new_docs_embeddings = []
 
-      # people: List[Person] = []
-
       for idx, m in enumerate(top_match_for_encodings):
         # if the score is < 0.02, we recognize the person
         if m is not None and m.scores["cosine"].value < 0.02:
@@ -159,28 +157,6 @@ class ImageIdentifier(Node):
         )
         docs.embeddings = new_docs_embeddings
         self.ann.index(docs)
-
-
-      # now publish all the people
-
-
-      # to find new faces, we
-
-      # for q in query:
-      #   print(f'Query {q.id}', q)
-
-      #   has_match = False
-      #   for k, m in enumerate(q.matches):
-      #       # if the previous
-      #       if m.scores["cosine"].value < 0.02:
-      #         has_match = True
-      #       print(f'{k}: {m.id} {m.scores["cosine"]} {m.tags["name"]} {m.location}')
-
-      # index the current faces if they are not recognized
-
-
-      # add the face encoding to the ann
-      # self.ann.add(face_encodings[0])
 
     # uncomment to kill the opencv window
     cv2.waitKey(1)
