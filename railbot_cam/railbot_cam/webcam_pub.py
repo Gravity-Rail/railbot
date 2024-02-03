@@ -8,6 +8,7 @@
 import rclpy # Python Client Library for ROS 2
 from rclpy.node import Node # Handles the creation of nodes
 from sensor_msgs.msg import Image # Image is the message type
+from std_msgs.msg import String
 from cv_bridge import CvBridge # Package to convert between ROS and OpenCV Images
 import cv2 # OpenCV library
 
@@ -49,7 +50,7 @@ class ImagePublisher(Node):
     Class constructor to set up the node
     """
     # Initiate the Node class's constructor and give it a name
-    super().__init__('image_publisher')
+    super().__init__('image_publisher', namespace="railbot")
 
     # Create the publisher. This publisher will publish an Image
     # to the video_frames topic. The queue size is 10 messages.
