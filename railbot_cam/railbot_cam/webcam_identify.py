@@ -1,3 +1,4 @@
+from typing import List
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Image
@@ -9,6 +10,8 @@ import numpy as np
 from docarray import DocumentArray, Document
 from annlite import AnnLite
 import time
+from railbot_interfaces.msg import Person
+
 # chroma_client = chromadb.Client()
 
 FACE_VECTOR_DIMS = 128
@@ -34,12 +37,9 @@ SILLY_LAST_NAMES = [
   "Crunk",
   "Mud",
   "Pickle",
-  "Picklestein",
-  "Picklesteinberg",
-  "Picklesteinberger",
-  "Picklesteinbergerstein",
-  "Picklesteinbergersteinberg",
-  "Picklesteinbergersteinberger",
+  "Grackle",
+  "Flub",
+  "Bonk",
 ]
 
 def generate_random_name():
@@ -62,6 +62,8 @@ class ImageIdentifier(Node):
       'video_frames',
       self.listener_callback,
       10)
+
+    self.publisher = self.create_publisher(Person, 'people', 10)
 
     # used to classify faces
     self.face_classifier = cv2.CascadeClassifier(
@@ -124,16 +126,16 @@ class ImageIdentifier(Node):
       new_docs_to_index = []
       new_docs_embeddings = []
 
+      # people: List[Person] = []
+
       for idx, m in enumerate(top_match_for_encodings):
+        # if the score is < 0.02, we recognize the person
         if m is not None and m.scores["cosine"].value < 0.02:
           # TODO: take some action based on recognizing someone! record it in a log at least
+          # person = Person(name=m.tags["name"], id=m.id)
+          self.publisher.publish(Person(name=m.tags["name"], id=m.id))
+          # people.append(person)
           continue
-
-        # print(f'match {m.id} {m.scores["cosine"]} {m.tags["name"]} {m.location}')
-        # if the score is < 0.02, consider it a match
-        # if :
-
-
 
         # if the score is > 0.02, but the best match occurred < 5 seconds ago, create a new face but copy the name from the old one
         if m is not None and m.tags['timestamp'] and time.time() - m.tags['timestamp'] < 5:
@@ -159,6 +161,9 @@ class ImageIdentifier(Node):
         self.ann.index(docs)
 
 
+      # now publish all the people
+
+
       # to find new faces, we
 
       # for q in query:
@@ -182,9 +187,9 @@ class ImageIdentifier(Node):
 
 def main(args=None):
   rclpy.init(args=args)
-  image_subscriber = ImageIdentifier()
-  rclpy.spin(image_subscriber)
-  image_subscriber.destroy_node()
+  image_identifier = ImageIdentifier()
+  rclpy.spin(image_identifier)
+  image_identifier.destroy_node()
   rclpy.shutdown()
 
 if __name__ == '__main__':

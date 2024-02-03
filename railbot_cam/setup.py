@@ -22,7 +22,8 @@ setup(
         'console_scripts': [
             'img_publisher = railbot_cam.webcam_pub:main',
             'img_subscriber = railbot_cam.webcam_sub:main',
-			'img_identifier = railbot_cam.webcam_identify:main'
+			'img_identifier = railbot_cam.webcam_identify:main',
+			'person_subscriber = railbot_cam.person_sub:main',
         ],
     },
 )

@@ -32,3 +32,9 @@ ros2 run railbot_cam img_subscriber
 ```bash
 ros2 run railbot_cam img_identifier
 ```
+
+## Subscribe to detected people
+
+```bash
+ros2 run railbot_cam person_subscriber
+```
