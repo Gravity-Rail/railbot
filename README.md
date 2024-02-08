@@ -277,6 +277,12 @@ OPENAI_API_KEY="sk-..." ros2 launch railbot_bringup mini_pupper_launch.py
 
 Now when you see `Starting audio recording...` try saying a few words. After capturing a few seconds of audio, it sends it to OpenAI to be converted into text. Then, it sends the Text to the Chat Completions endpoint to compute a response. Finally, it converts the response text back into speech using _another_ API. No wonder it takes so long to reply!
 
+The same example on MacOS with Whisper:
+
+```bash
+OPENAI_API_KEY="sk-..." ros2 launch railbot_bringup macos_launch.py
+```
+
 # Usage
 
 ## Demo: OpenAI-based interaction on Mini Pupper 2
